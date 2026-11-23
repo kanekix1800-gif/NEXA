@@ -26,6 +26,8 @@ O link direto entra no perfil sem passar pela tela de login. Basta acrescentá-l
 
 O próprio aplicativo gera o QR Code de acesso. Na tela de abertura, na tela **Entrar** ou em **Perfil → Ajuda e Suporte**, toque em **Abrir em outro aparelho**. O código pode levar à tela inicial ou direto a um dos quatro perfis. Ele é gerado no aparelho, sem serviços externos, e sempre aponta para o endereço em que o site está publicado.
 
+Para slides e impressão, a pasta [qr-code/](qr-code/) traz os códigos prontos do site publicado: o geral (`nexa.png` e `nexa.svg`), um por perfil e um cartaz em A4 (`nexa-cartaz.pdf`). Se o endereço mudar, gere tudo de novo com `node scripts/make-qr.mjs https://SEU-USUARIO.github.io/NEXA/`.
+
 Cada aparelho guarda a sua própria cópia dos dados. O que um jurado cria no celular dele não aparece no celular de outro, e nada é enviado a servidores.
 
 ## Roteiro de demonstração (cerca de 5 minutos)
