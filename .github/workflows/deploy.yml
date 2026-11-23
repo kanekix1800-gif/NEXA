@@ -1,0 +1,72 @@
+# Publica o NEXA no GitHub Pages a cada push na branch principal.
+#
+# Configuração única no repositório (GitHub → Settings → Pages):
+#   Build and deployment → Source: "GitHub Actions".
+#
+# O build usa caminho base relativo e roteamento por hash, portanto funciona em
+# https://<usuario>.github.io/<repositorio>/ sem nenhum ajuste.
+name: Publicar no GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Mantém apenas a publicação mais recente em andamento.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  verificar:
+    name: Verificar (lint e testes)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+
+  build:
+    name: Gerar o site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Build
+        run: npm run build
+        env:
+          # Opcional: URL (HTTPS) do backend da NEXA IA. Sem ela, a assistente roda em modo demonstrativo.
+          VITE_AI_API_URL: ${{ vars.VITE_AI_API_URL }}
+          # Opcional: centro do mapa e nome da cidade de demonstração.
+          VITE_MAP_CENTER_LAT: ${{ vars.VITE_MAP_CENTER_LAT }}
+          VITE_MAP_CENTER_LNG: ${{ vars.VITE_MAP_CENTER_LNG }}
+          VITE_CITY_NAME: ${{ vars.VITE_CITY_NAME }}
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  publicar:
+    name: Publicar
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

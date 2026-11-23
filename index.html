@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#faf5ec" />
+    <meta
+      name="description"
+      content="NEXA — Conexões que transformam realidades. Uma plataforma que conecta moradores, comércio local, instituições e poder público."
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="NEXA" />
+    <meta property="og:title" content="NEXA — Conexões que transformam realidades" />
+    <meta
+      property="og:description"
+      content="Comunidade, comércio local, instituições e inteligência artificial em um só lugar."
+    />
+    <meta property="og:type" content="website" />
+    <title>NEXA — Conexões que transformam realidades</title>
+    <style>
+      /* Tela de abertura estática: aparece imediatamente, antes de o app carregar. */
+      html,
+      body {
+        margin: 0;
+        background: #faf5ec;
+      }
+      .nexa-boot {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        font-family:
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          Roboto,
+          sans-serif;
+        color: #064d3b;
+      }
+      .nexa-boot strong {
+        font-size: 34px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+      }
+      .nexa-boot svg {
+        animation: nexa-boot-pulse 1.6s ease-in-out infinite;
+      }
+      @keyframes nexa-boot-pulse {
+        50% {
+          opacity: 0.5;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .nexa-boot svg {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div class="nexa-boot" role="status" aria-label="Carregando o NEXA">
+        <svg width="72" height="72" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <g stroke="#064d3b" stroke-width="5.5">
+            <line x1="14" y1="44.5" x2="14" y2="19.5" />
+            <line x1="18.47" y1="17.72" x2="48.6" y2="49.5" />
+            <line x1="50" y1="49" x2="50" y2="19.5" />
+          </g>
+          <g stroke="#064d3b" stroke-width="4.5">
+            <circle cx="14" cy="13" r="6.5" />
+            <circle cx="14" cy="51" r="6.5" />
+            <circle cx="50" cy="13" r="6.5" />
+          </g>
+          <circle cx="50" cy="51" r="8.75" fill="#f2a333" />
+        </svg>
+        <strong>NEXA</strong>
+      </div>
+    </div>
+    <noscript>O NEXA precisa de JavaScript ativado para funcionar.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
