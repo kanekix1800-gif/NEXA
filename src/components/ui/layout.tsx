@@ -82,12 +82,12 @@ export function PageHeader({
     <header className="bg-canvas/90 pt-safe z-sticky sticky top-0 backdrop-blur-md">
       <div className={cn('mx-auto w-full px-5 lg:px-8', WIDTHS[width])}>
         {variant === 'root' ? (
-          <div className="flex min-h-16 items-center justify-between gap-3 py-2">
-            <div className="min-w-0">
-              <h1 className="text-ink-900 truncate text-[1.375rem] leading-tight font-extrabold lg:text-2xl">
+          <div className="flex min-h-16 flex-wrap items-center justify-between gap-x-3 gap-y-1 py-2">
+            <div className="min-w-[min(100%,11rem)] flex-1">
+              <h1 className="text-ink-900 line-clamp-2 text-[1.375rem] leading-tight font-extrabold lg:text-2xl">
                 {title}
               </h1>
-              {subtitle && <p className="text-ink-500 mt-0.5 text-[13px]">{subtitle}</p>}
+              {subtitle && <p className="text-ink-500 mt-0.5 text-[0.8125rem]">{subtitle}</p>}
             </div>
             {actions && <div className="flex shrink-0 items-center gap-1">{actions}</div>}
           </div>
@@ -97,7 +97,9 @@ export function PageHeader({
               <ArrowLeft className="size-5" />
             </IconButton>
             <div className="min-w-0 text-center">
-              <h1 className="text-ink-900 truncate text-[17px] font-bold">{title}</h1>
+              <h1 className="text-ink-900 line-clamp-2 text-[1.0625rem] leading-tight font-bold">
+                {title}
+              </h1>
               {subtitle && <p className="text-ink-500 truncate text-xs">{subtitle}</p>}
             </div>
             <div className="flex min-w-11 items-center justify-end gap-1">{actions}</div>
@@ -122,12 +124,12 @@ interface SectionHeaderProps {
 export function SectionHeader({ title, to, actionLabel, action, className }: SectionHeaderProps) {
   return (
     <div className={cn('flex items-center justify-between gap-3', className)}>
-      <h2 className="text-ink-900 text-[17px] font-bold">{title}</h2>
+      <h2 className="text-ink-900 text-[1.0625rem] font-bold">{title}</h2>
       {action ??
         (to && actionLabel && (
           <Link
             to={to}
-            className="text-nexa-800 hover:text-nexa-900 -mr-1 inline-flex h-9 items-center gap-0.5 rounded-full px-1 text-[13px] font-bold"
+            className="text-nexa-800 hover:text-nexa-900 -mr-1 inline-flex h-9 items-center gap-0.5 rounded-full px-1 text-[0.8125rem] font-bold"
           >
             {actionLabel}
             <ChevronRight className="size-4" aria-hidden />
@@ -228,14 +230,14 @@ export function ListRow({
       <span className="min-w-0 flex-1">
         <span
           className={cn(
-            'block truncate text-[15px] font-bold',
+            'block truncate text-[0.9375rem] font-bold',
             tone === 'danger' ? 'text-danger-600' : 'text-ink-900',
           )}
         >
           {title}
         </span>
         {description && (
-          <span className="text-ink-500 mt-0.5 line-clamp-2 block text-[13px] leading-snug">
+          <span className="text-ink-500 mt-0.5 line-clamp-2 block text-[0.8125rem] leading-snug">
             {description}
           </span>
         )}

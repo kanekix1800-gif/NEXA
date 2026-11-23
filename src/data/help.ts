@@ -92,6 +92,24 @@ export const HELP_TOPICS: HelpTopic[] = [
     ],
   },
   {
+    id: 'acessibilidade',
+    question: 'Como deixo o NEXA mais acessível para mim?',
+    answer: [
+      'Abra Perfil → Acessibilidade (ou o atalho na tela inicial, na abertura e na tela Entrar). Lá você aumenta o texto, liga o alto contraste, troca a fonte, reduz animações e escolhe sons e vibração.',
+      'Para ouvir o aplicativo, ligue "Falar o nome de cada tela", "Ler o que eu tocar" e o botão "Ouvir tela". Se você já usa TalkBack ou VoiceOver, deixe essas opções desligadas: o NEXA já avisa o seu leitor a cada troca de tela.',
+      'As opções valem para o aparelho, funcionam antes mesmo de entrar na conta e ficam guardadas somente nele.',
+    ],
+  },
+  {
+    id: 'mobilidade-acessivel',
+    question: 'Onde vejo ônibus acessíveis e barreiras no caminho?',
+    answer: [
+      'Em Mobilidade acessível (na tela inicial e no Perfil). A aba Ônibus mostra as linhas com elevador, piso baixo e aviso sonoro, com as próximas partidas e as paradas.',
+      'A aba No caminho lista escadas, degraus e outros obstáculos — com um caminho alternativo — e também rampas, elevadores, piso tátil e semáforos sonoros. A aba Alertas avisa por voz, som e vibração quando você se aproxima de uma barreira; a simulação mostra como funciona.',
+      'Na base de demonstração, linhas, horários e pontos são fictícios.',
+    ],
+  },
+  {
     id: 'sem-internet',
     question: 'Posso usar o NEXA sem internet?',
     answer: [

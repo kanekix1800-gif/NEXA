@@ -24,6 +24,10 @@
 
 import type {
   AIMessage,
+  AccessAudience,
+  AccessPointKind,
+  AccessPointView,
+  AccessibilityFeature,
   AdminOverview,
   AppNotification,
   AvatarSpec,
@@ -74,6 +78,9 @@ import type {
   Transaction,
   TransactionCategory,
   TransactionType,
+  TransitFeature,
+  TransitLineView,
+  TransitStopView,
   Urgency,
   User,
   UserRole,
@@ -365,6 +372,9 @@ export interface BusinessFilters {
   search?: string
   onlyFavorites?: boolean
   onlyOpenNow?: boolean
+  neighborhoodId?: ID
+  /** Apenas estabelecimentos que informam PELO MENOS UM dos recursos de acessibilidade indicados. */
+  accessibility?: AccessibilityFeature[]
   /** Ponto de referência para distâncias. Padrão: centro aproximado do bairro do usuário. */
   near?: GeoPoint
   /** `distance` (padrão), `rating` ou `name`. */
@@ -388,6 +398,8 @@ export interface BusinessInput {
   instagram?: string
   schedule: WeekSchedule
   tags?: string[]
+  /** Recursos de acessibilidade do local (lista vazia = nenhum informado). */
+  accessibility?: AccessibilityFeature[]
   settings?: Partial<BusinessSettings>
   status?: Business['status']
 }
@@ -571,6 +583,7 @@ export interface EventFilters {
   /** `upcoming` (padrão) = ainda não terminou; `past` = já realizado. */
   when?: 'upcoming' | 'past' | 'all'
   categoryId?: ID
+  neighborhoodId?: ID
   search?: string
   /** Eventos com presença confirmada pelo usuário indicado. */
   attendeeId?: ID
@@ -594,6 +607,8 @@ export interface EventInput {
   location?: GeoPoint | null
   /** Limite de vagas, ou `null` para ilimitado. */
   capacity?: number | null
+  /** Recursos de acessibilidade oferecidos no evento. */
+  accessibility?: AccessibilityFeature[]
   /** Em nome de quem organizar. Padrão: `self`. */
   organizerAs?: 'self' | 'institution' | 'business'
   /** Publica o evento também no feed. Padrão: `true`. */
@@ -653,9 +668,51 @@ export interface MapRepository {
   /**
    * Pontos do mapa inteligente, gerados a partir das entidades com coordenadas:
    * demandas (exceto encerradas), estabelecimentos ativos, instituições verificadas,
-   * eventos futuros e serviços públicos. Sem `layers`, devolve todas as camadas.
+   * eventos futuros, serviços públicos, barreiras e apoios de acessibilidade e paradas
+   * de ônibus. Sem `layers`, devolve todas as camadas.
    */
   listPoints(filters?: { layers?: MapLayer[] }): Promise<MapPoint[]>
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// Mobilidade acessível (ônibus, barreiras e apoios no caminho)
+// ═════════════════════════════════════════════════════════════════════════════
+
+export interface TransitLineFilters {
+  /** Apenas linhas com pelo menos parte da frota acessível. */
+  accessibleOnly?: boolean
+  /** Linhas que tenham TODOS os recursos indicados. */
+  features?: TransitFeature[]
+  /** Linhas que passam pelo bairro. */
+  neighborhoodId?: ID
+  /** Busca por número, nome da linha, parada, bairro ou recurso. */
+  search?: string
+}
+
+export interface AccessPointFilters {
+  /** `barrier` = dificulta a passagem; `support` = ajuda no deslocamento. */
+  nature?: 'barrier' | 'support'
+  kinds?: AccessPointKind[]
+  /** Pontos relevantes para um público (ex.: pessoas cegas). */
+  audience?: AccessAudience
+  neighborhoodId?: ID
+  search?: string
+  /** Localização consentida do aparelho, usada para calcular as distâncias. */
+  near?: GeoPoint
+}
+
+/** Dados de referência de mobilidade. Todas as consultas exigem sessão. */
+export interface MobilityRepository {
+  /**
+   * Linhas de ônibus com paradas e próximas partidas de hoje. As linhas com toda a
+   * frota acessível vêm primeiro, depois as parciais e, por fim, as sem acessibilidade.
+   */
+  listLines(filters?: TransitLineFilters): Promise<TransitLineView[]>
+  getLine(id: ID): Promise<TransitLineView>
+  /** Paradas, da mais próxima à mais distante do ponto de referência do usuário. */
+  listStops(options?: { near?: GeoPoint; search?: string }): Promise<TransitStopView[]>
+  /** Barreiras e apoios, do mais próximo ao mais distante do ponto de referência. */
+  listAccessPoints(filters?: AccessPointFilters): Promise<AccessPointView[]>
 }
 
 // ═════════════════════════════════════════════════════════════════════════════
@@ -718,6 +775,7 @@ export interface Repositories {
   news: NewsRepository
   stats: StatsRepository
   map: MapRepository
+  mobility: MobilityRepository
   aiConversations: AIConversationsRepository
   settings: SettingsRepository
   system: SystemRepository

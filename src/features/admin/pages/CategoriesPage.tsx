@@ -81,7 +81,7 @@ function CategoryForm({
           <Input value={name} maxLength={40} onChange={(e) => setName(e.target.value)} />
         </Field>
         <div>
-          <p className="text-ink-800 mb-2 text-[13px] font-bold">Ícone</p>
+          <p className="text-ink-800 mb-2 text-[0.8125rem] font-bold">Ícone</p>
           <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Ícone" tabIndex={-1}>
             {CATEGORY_ICON_OPTIONS[kind].map((option) => (
               <button
@@ -104,7 +104,7 @@ function CategoryForm({
           </div>
         </div>
         <div>
-          <p className="text-ink-800 mb-2 text-[13px] font-bold">Cor</p>
+          <p className="text-ink-800 mb-2 text-[0.8125rem] font-bold">Cor</p>
           <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Cor" tabIndex={-1}>
             {COLOR_KEYS.map((option) => (
               <button

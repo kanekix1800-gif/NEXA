@@ -1,5 +1,7 @@
 import {
+  Accessibility,
   Bell,
+  BusFront,
   CalendarDays,
   CalendarPlus,
   ChartColumn,
@@ -60,6 +62,7 @@ export function sidebarSections(user: User): NavSection[] {
         { to: paths.community, label: 'Comunidade', icon: Users },
         { to: paths.demands, label: 'Demandas', icon: Megaphone },
         { to: paths.map, label: 'Mapa inteligente', icon: Map },
+        { to: paths.mobility, label: 'Mobilidade acessível', icon: BusFront },
         { to: paths.businesses, label: 'Comércio Local', icon: Store },
         { to: paths.events, label: 'Eventos', icon: CalendarDays },
         { to: paths.institutions, label: 'Instituições', icon: Landmark },
@@ -97,6 +100,7 @@ export function sidebarSections(user: User): NavSection[] {
     items: [
       { to: paths.notifications, label: 'Notificações', icon: Bell },
       { to: paths.profile, label: 'Perfil', icon: CircleUserRound },
+      { to: paths.accessibility, label: 'Acessibilidade', icon: Accessibility },
     ],
   })
   return sections

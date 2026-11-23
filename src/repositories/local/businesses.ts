@@ -1,18 +1,19 @@
 import { paths } from '@/app/paths'
 import { config } from '@/config'
 import { can } from '@/services/permissions'
-import type {
-  Business,
-  BusinessView,
-  CatalogItem,
-  Category,
-  Database,
-  DayHours,
-  GeoPoint,
-  Review,
-  ReviewView,
-  User,
-  WeekSchedule,
+import {
+  ACCESSIBILITY_FEATURE_LABEL,
+  type Business,
+  type BusinessView,
+  type CatalogItem,
+  type Category,
+  type Database,
+  type DayHours,
+  type GeoPoint,
+  type Review,
+  type ReviewView,
+  type User,
+  type WeekSchedule,
 } from '@/types'
 import { now, nowISO } from '@/utils/clock'
 import { conflictError, forbiddenError, notFoundError, validationError } from '@/utils/errors'
@@ -23,6 +24,7 @@ import { matchesSearch, normalizeText, truncate } from '@/utils/text'
 
 import type { BusinessInput, BusinessesRepository } from '../contracts'
 import {
+  accessibilityFeatures,
   currentUser,
   imageList,
   neighborhoodName,
@@ -271,6 +273,9 @@ function applyPatch(db: Database, business: Business, patch: Partial<BusinessInp
 
   if (patch.schedule !== undefined) business.schedule = requireSchedule(patch.schedule)
   if (patch.tags !== undefined) business.tags = requireTags(patch.tags)
+  if (patch.accessibility !== undefined) {
+    business.accessibility = accessibilityFeatures(patch.accessibility)
+  }
   if (patch.settings !== undefined) {
     const allow = patch.settings.allowNegativeStock
     if (allow !== undefined) business.settings.allowNegativeStock = allow === true
@@ -295,7 +300,13 @@ export function createBusinessesRepository(ctx: LocalContext): BusinessesReposit
           .filter(
             (business) =>
               business.status === 'active' &&
-              (filters.categoryId === undefined || business.categoryId === filters.categoryId),
+              (filters.categoryId === undefined || business.categoryId === filters.categoryId) &&
+              (filters.neighborhoodId === undefined ||
+                business.neighborhoodId === filters.neighborhoodId) &&
+              (filters.accessibility === undefined ||
+                filters.accessibility.some((feature) =>
+                  (business.accessibility ?? []).includes(feature),
+                )),
           )
           .map((business) => toBusinessView(db, business, viewer, filters.near))
           .filter(
@@ -307,6 +318,9 @@ export function createBusinessesRepository(ctx: LocalContext): BusinessesReposit
                 view.category.name,
                 view.tags.join(' '),
                 view.neighborhoodName,
+                (view.accessibility ?? [])
+                  .map((feature) => ACCESSIBILITY_FEATURE_LABEL[feature])
+                  .join(' '),
               ) &&
               (!filters.onlyFavorites || view.isFavorite) &&
               (!filters.onlyOpenNow || view.isOpenNow),
@@ -380,6 +394,7 @@ export function createBusinessesRepository(ctx: LocalContext): BusinessesReposit
           email: input.email,
           instagram: input.instagram,
           tags: input.tags,
+          accessibility: input.accessibility,
           settings: input.settings,
         })
 

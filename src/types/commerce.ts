@@ -1,3 +1,4 @@
+import type { AccessibilityFeature } from './accessibility'
 import type { Cents, GeoPoint, ID, ISODate, IllustrationKey } from './common'
 import type { Category } from './demands'
 import type { PublicProfile } from './user'
@@ -64,6 +65,8 @@ export interface Business {
   schedule: WeekSchedule
   /** Destaques/serviços oferecidos (ex.: "Entrega", "Aceita Pix"). */
   tags: string[]
+  /** Recursos de acessibilidade informados pelo estabelecimento. */
+  accessibility?: AccessibilityFeature[]
   settings: BusinessSettings
   /**
    * Registro fictício da base demonstrativa. Os contatos de registros demonstrativos

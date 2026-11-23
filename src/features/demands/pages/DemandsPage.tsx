@@ -128,7 +128,7 @@ export default function DemandsPage() {
             }
           >
             {(items) => (
-              <div className="grid gap-3 lg:grid-cols-2">
+              <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
                 {items.map((demand) => (
                   <DemandCard key={demand.id} demand={demand} />
                 ))}

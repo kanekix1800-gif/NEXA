@@ -184,6 +184,10 @@ describe('map', () => {
         `institutions:${FIXTURE.institutions.cityHall}`,
         'events:e1',
         `services:${FIXTURE.services.clinic}`,
+        `accessibility:${FIXTURE.mobility.stairs}`,
+        `accessibility:${FIXTURE.mobility.ramp}`,
+        `transit:${FIXTURE.mobility.stopCentro}`,
+        `transit:${FIXTURE.mobility.stopVila}`,
       ].sort(),
     )
 

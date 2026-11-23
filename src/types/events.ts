@@ -1,3 +1,4 @@
+import type { AccessibilityFeature } from './accessibility'
 import type { GeoPoint, ID, ISODate, IllustrationKey } from './common'
 import type { EntityAvatar } from './community'
 import type { Category } from './demands'
@@ -32,6 +33,8 @@ export interface CommunityEvent {
   attendeeIds: ID[]
   /** Limite de vagas (opcional). */
   capacity?: number
+  /** Recursos de acessibilidade oferecidos no evento. */
+  accessibility?: AccessibilityFeature[]
   status: 'scheduled' | 'cancelled'
   createdBy: ID
   createdAt: ISODate

@@ -1,6 +1,7 @@
 import type { CoreSeed, SeedContext } from './context'
 import { buildFavorites, buildProducts, buildReviews } from './core/commerce'
 import { buildSales, buildTransactions } from './core/finance'
+import { buildAccessPoints, buildTransitLines, buildTransitStops } from './core/mobility'
 import { buildUsers } from './core/people'
 import {
   buildBusinesses,
@@ -12,8 +13,8 @@ import {
 
 /**
  * Gera a parte estrutural da base demonstrativa: lugares, pessoas, categorias,
- * instituições, serviços públicos, estabelecimentos, avaliações, produtos, vendas e
- * finanças. Tudo parte do elenco fixo (`cast.ts`); os dados são FICTÍCIOS.
+ * instituições, serviços públicos, estabelecimentos, avaliações, produtos, vendas,
+ * finanças e mobilidade acessível (ônibus, barreiras e apoios). Tudo parte do elenco fixo (`cast.ts`); os dados são FICTÍCIOS.
  */
 export function buildCore(ctx: SeedContext): CoreSeed {
   const { users, userSettings } = buildUsers(ctx)
@@ -33,5 +34,8 @@ export function buildCore(ctx: SeedContext): CoreSeed {
     products,
     sales,
     transactions: buildTransactions(ctx, sales),
+    transitLines: buildTransitLines(),
+    transitStops: buildTransitStops(ctx),
+    accessPoints: buildAccessPoints(ctx),
   }
 }

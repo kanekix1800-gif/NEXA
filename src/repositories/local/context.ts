@@ -1,15 +1,17 @@
 import { config } from '@/config'
 import { can, type Permission, type PermissionResource } from '@/services/permissions'
-import type {
-  AppNotification,
-  Database,
-  GeoPoint,
-  ID,
-  Institution,
-  NotificationCategory,
-  PublicProfile,
-  User,
-  UserSettings,
+import {
+  ACCESSIBILITY_FEATURES,
+  type AccessibilityFeature,
+  type AppNotification,
+  type Database,
+  type GeoPoint,
+  type ID,
+  type Institution,
+  type NotificationCategory,
+  type PublicProfile,
+  type User,
+  type UserSettings,
 } from '@/types'
 import { nowISO } from '@/utils/clock'
 import {
@@ -348,6 +350,25 @@ export function optionalGeoPoint(value: unknown, field: string): GeoPoint | null
   }
   assertInsideDemoArea(value, field)
   return approximatePoint(value, 4)
+}
+
+/**
+ * Valida a lista de recursos de acessibilidade de um local: só aceita recursos
+ * conhecidos, remove repetições e devolve na ordem padrão de exibição.
+ */
+export function accessibilityFeatures(
+  value: unknown,
+  field = 'accessibility',
+): AccessibilityFeature[] {
+  if (value === undefined || value === null) return []
+  if (
+    !Array.isArray(value) ||
+    value.some((item) => !ACCESSIBILITY_FEATURES.includes(item as AccessibilityFeature))
+  ) {
+    const message = 'Selecione recursos de acessibilidade válidos.'
+    throw validationError(message, { [field]: message })
+  }
+  return ACCESSIBILITY_FEATURES.filter((feature) => value.includes(feature))
 }
 
 /** Valida um e-mail e o devolve normalizado (minúsculas, sem espaços). */

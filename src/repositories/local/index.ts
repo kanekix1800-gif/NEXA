@@ -7,6 +7,7 @@ import { createDemandsRepository } from './demands'
 import { createEventsRepository } from './events'
 import { createInstitutionsRepository } from './institutions'
 import { createMapRepository } from './map'
+import { createMobilityRepository } from './mobility'
 import { createModerationRepository } from './moderation'
 import { createNewsRepository } from './news'
 import { createNotificationsRepository } from './notifications'
@@ -45,6 +46,7 @@ export function createLocalRepositories(store: LocalStore): Repositories {
     news: createNewsRepository(ctx),
     stats: createStatsRepository(ctx),
     map: createMapRepository(ctx),
+    mobility: createMobilityRepository(ctx),
     aiConversations: createAIConversationsRepository(ctx),
     settings: createSettingsRepository(ctx),
     system: createSystemRepository(ctx),

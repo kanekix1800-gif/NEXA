@@ -8,6 +8,10 @@ import { registerSW } from 'virtual:pwa-register'
 import { App } from './app/App'
 import { reloadForUpdate } from './app/updates'
 import { initRepositories } from './repositories'
+import { startAccessibility } from './services/accessibility/runtime'
+
+// Aplica as preferências de acessibilidade antes de desenhar a interface.
+startAccessibility()
 
 // Mantém o aplicativo na versão publicada: ao instalar uma atualização, a página recarrega sozinha.
 registerSW({ immediate: true })

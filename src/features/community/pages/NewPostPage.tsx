@@ -3,12 +3,14 @@ import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
 
 import { paths } from '@/app/paths'
+import { DictationButton } from '@/components/accessibility'
 import {
   Button,
   Callout,
   Field,
   FilterChips,
   ImagePicker,
+  notify,
   Page,
   PageHeader,
   Select,
@@ -74,7 +76,7 @@ export default function NewPostPage() {
       <Page bottomNav={false} className="pb-28">
         <div className="flex flex-col gap-5 pt-2">
           <div>
-            <p className="text-ink-800 mb-2 text-[13px] font-bold">Sobre o que é?</p>
+            <p className="text-ink-800 mb-2 text-[0.8125rem] font-bold">Sobre o que é?</p>
             <FilterChips
               ariaLabel="Categoria da publicação"
               options={categories}
@@ -96,9 +98,17 @@ export default function NewPostPage() {
               placeholder="Escreva para a sua comunidade…"
             />
           </Field>
+          <DictationButton
+            field="a publicação"
+            className="-mt-3 self-end"
+            onText={(spoken) =>
+              setContent((current) => `${current} ${spoken}`.trim().slice(0, limit))
+            }
+            onError={(message) => notify.warning(message)}
+          />
 
           <div>
-            <p className="text-ink-800 mb-2 text-[13px] font-bold">Imagem (opcional)</p>
+            <p className="text-ink-800 mb-2 text-[0.8125rem] font-bold">Imagem (opcional)</p>
             <ImagePicker value={images} onChange={setImages} max={1} />
           </div>
 

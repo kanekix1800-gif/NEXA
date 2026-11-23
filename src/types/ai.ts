@@ -13,7 +13,16 @@ export interface AIAction {
 
 /** Referência a um registro existente na plataforma, citado na resposta. */
 export interface AIReference {
-  kind: 'business' | 'event' | 'demand' | 'institution' | 'service' | 'news' | 'product'
+  kind:
+    | 'business'
+    | 'event'
+    | 'demand'
+    | 'institution'
+    | 'service'
+    | 'news'
+    | 'product'
+    | 'transit'
+    | 'access'
   id: ID
   title: string
   subtitle?: string

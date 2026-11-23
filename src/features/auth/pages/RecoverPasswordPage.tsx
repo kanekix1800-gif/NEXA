@@ -93,7 +93,7 @@ export default function RecoverPasswordPage() {
           <span className="bg-nexa-100 text-nexa-800 flex size-16 items-center justify-center rounded-full">
             <MailCheck className="size-8" aria-hidden />
           </span>
-          <p className="text-ink-600 text-[15px]">
+          <p className="text-ink-600 text-[0.9375rem]">
             Se existir uma conta para <strong className="text-ink-900">{email}</strong>, enviaremos
             um link para criar uma nova senha.
           </p>

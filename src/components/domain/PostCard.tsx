@@ -61,11 +61,14 @@ export function PostCard({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
             {post.byline.to ? (
-              <Link to={post.byline.to} className="text-ink-900 truncate text-[15px] font-bold">
+              <Link
+                to={post.byline.to}
+                className="text-ink-900 truncate text-[0.9375rem] font-bold"
+              >
                 {post.byline.name}
               </Link>
             ) : (
-              <span className="text-ink-900 truncate text-[15px] font-bold">
+              <span className="text-ink-900 truncate text-[0.9375rem] font-bold">
                 {post.byline.name}
               </span>
             )}
@@ -87,7 +90,7 @@ export function PostCard({
             actions={menu}
             trigger={
               <IconButton label="Opções da publicação" size="sm" className="-mt-1 -mr-2">
-                <EllipsisVertical className="size-[18px]" />
+                <EllipsisVertical className="size-[1.125rem]" />
               </IconButton>
             }
           />
@@ -103,7 +106,7 @@ export function PostCard({
       <Link to={detail} className="mt-3 block" aria-label="Abrir publicação">
         <p
           className={cn(
-            'text-ink-800 text-[15px] leading-relaxed whitespace-pre-line',
+            'text-ink-800 text-[0.9375rem] leading-relaxed whitespace-pre-line',
             !expanded && 'line-clamp-5',
           )}
         >
@@ -125,12 +128,12 @@ export function PostCard({
           to={paths.demand(post.linkedDemand.id)}
           className="bg-nexa-50 hover:bg-nexa-100 mt-3 flex items-center gap-2.5 rounded-2xl px-3 py-2.5 transition-colors"
         >
-          <Megaphone className="text-nexa-800 size-[18px] shrink-0" aria-hidden />
+          <Megaphone className="text-nexa-800 size-[1.125rem] shrink-0" aria-hidden />
           <span className="min-w-0 flex-1">
-            <span className="text-ink-900 block truncate text-[13px] font-bold">
+            <span className="text-ink-900 block truncate text-[0.8125rem] font-bold">
               {post.linkedDemand.title}
             </span>
-            <span className="text-ink-500 block text-[11px]">
+            <span className="text-ink-500 block text-[0.6875rem]">
               Demanda {post.linkedDemand.protocol} · toque para acompanhar
             </span>
           </span>
@@ -141,17 +144,19 @@ export function PostCard({
           to={paths.event(post.linkedEvent.id)}
           className="bg-sun-50 hover:bg-sun-100 mt-3 flex items-center gap-2.5 rounded-2xl px-3 py-2.5 transition-colors"
         >
-          <CalendarDays className="text-sun-700 size-[18px] shrink-0" aria-hidden />
+          <CalendarDays className="text-sun-700 size-[1.125rem] shrink-0" aria-hidden />
           <span className="min-w-0 flex-1">
-            <span className="text-ink-900 block truncate text-[13px] font-bold">
+            <span className="text-ink-900 block truncate text-[0.8125rem] font-bold">
               {post.linkedEvent.title}
             </span>
-            <span className="text-ink-500 block text-[11px]">Evento · toque para ver detalhes</span>
+            <span className="text-ink-500 block text-[0.6875rem]">
+              Evento · toque para ver detalhes
+            </span>
           </span>
         </Link>
       )}
 
-      <footer className="text-ink-600 mt-3 flex items-center gap-1 text-[13px] font-semibold">
+      <footer className="text-ink-600 mt-3 flex items-center gap-1 text-[0.8125rem] font-semibold">
         <button
           type="button"
           onClick={() => onToggleLike(post)}

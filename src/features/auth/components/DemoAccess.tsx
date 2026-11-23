@@ -26,12 +26,12 @@ export function DemoAccess({ pendingRole, onSelect }: DemoAccessProps) {
   return (
     <section aria-labelledby="demo-access-title" className="bg-nexa-50 rounded-card p-4">
       <div className="flex items-center justify-between gap-2">
-        <h2 id="demo-access-title" className="text-ink-900 text-[15px] font-extrabold">
+        <h2 id="demo-access-title" className="text-ink-900 text-[0.9375rem] font-extrabold">
           Acesso rápido
         </h2>
         <DemoBadge label="Modo demonstração" />
       </div>
-      <p className="text-ink-600 mt-1 text-[13px]">
+      <p className="text-ink-600 mt-1 text-[0.8125rem]">
         Entre com um perfil pronto e explore — sem cadastro e sem senha.
       </p>
       <ul className="mt-3 flex flex-col gap-2">

@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { House, Landmark, Store } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router'
@@ -15,8 +14,9 @@ import {
   RadioCardGroup,
   Select,
 } from '@/components/ui'
+import { NeighborhoodPicker } from '@/components/domain/NeighborhoodPicker'
 import { useAuth } from '@/contexts/AuthContext'
-import { repos, type SignUpInput } from '@/repositories'
+import type { SignUpInput } from '@/repositories'
 import { INSTITUTION_CATEGORY_LABEL, type InstitutionCategory } from '@/types'
 import { isAppError, toUserMessage } from '@/utils/errors'
 import { PASSWORD_MIN_LENGTH } from '@/utils/password'
@@ -50,10 +50,6 @@ const ROLE_OPTIONS = [
 export default function SignUpPage() {
   const { signUp } = useAuth()
   const navigate = useNavigate()
-  const neighborhoods = useQuery({
-    queryKey: ['reference', 'neighborhoods'],
-    queryFn: () => repos.reference.listNeighborhoods(),
-  })
 
   const [step, setStep] = useState<'role' | 'details'>('role')
   const [role, setRole] = useState<Role | null>(null)
@@ -173,17 +169,11 @@ export default function SignUpPage() {
           hint="Usamos apenas o bairro — nunca o seu endereço."
           required
         >
-          <Select
+          <NeighborhoodPicker
             value={neighborhoodId}
-            onChange={(event) => setNeighborhoodId(event.target.value)}
-          >
-            <option value="">Selecione o seu bairro</option>
-            {(neighborhoods.data ?? []).map((neighborhood) => (
-              <option key={neighborhood.id} value={neighborhood.id}>
-                {neighborhood.name}
-              </option>
-            ))}
-          </Select>
+            onChange={setNeighborhoodId}
+            placeholder="Selecione o seu bairro"
+          />
         </Field>
 
         {role === 'institution' && (

@@ -1,6 +1,9 @@
 import { paths } from '@/app/paths'
 import {
+  ACCESS_POINT_ICON,
+  ACCESS_POINT_KIND_LABEL,
   INSTITUTION_CATEGORY_LABEL,
+  isBarrierKind,
   PUBLIC_SERVICE_KIND_LABEL,
   type Category,
   type Database,
@@ -15,7 +18,15 @@ import { pluralize, truncate } from '@/utils/text'
 import type { MapRepository } from '../contracts'
 import { neighborhoodName, requireUser, type LocalContext } from './context'
 
-const ALL_LAYERS: MapLayer[] = ['demands', 'businesses', 'institutions', 'events', 'services']
+const ALL_LAYERS: MapLayer[] = [
+  'demands',
+  'businesses',
+  'institutions',
+  'events',
+  'services',
+  'accessibility',
+  'transit',
+]
 
 function categoryOf(db: Database, id: string): Category | undefined {
   return db.categories.find((category) => category.id === id)
@@ -124,6 +135,53 @@ function buildPoints(db: Database, layers: ReadonlySet<MapLayer>): MapPoint[] {
         color: service.color,
         to: paths.publicService(service.id),
         meta: service.hours,
+      })
+    }
+  }
+
+  if (layers.has('accessibility')) {
+    for (const point of db.accessPoints) {
+      const barrier = isBarrierKind(point.kind)
+      points.push({
+        id: `accessibility:${point.id}`,
+        layer: 'accessibility',
+        refId: point.id,
+        title: point.title,
+        categoryLabel: ACCESS_POINT_KIND_LABEL[point.kind],
+        description: truncate(
+          point.alternative ? `${point.description} ${point.alternative}` : point.description,
+          160,
+        ),
+        addressLabel: `${point.addressHint} — ${neighborhoodName(db, point.neighborhoodId)}`,
+        location: point.location,
+        icon: ACCESS_POINT_ICON[point.kind],
+        color: barrier ? 'terracotta' : 'teal',
+        to: paths.mobilityPoint(point.id),
+        meta: barrier ? 'Barreira no caminho' : 'Apoio à acessibilidade',
+      })
+    }
+  }
+
+  if (layers.has('transit')) {
+    for (const stop of db.transitStops) {
+      const lines = db.transitLines.filter((line) => line.stopIds.includes(stop.id))
+      const accessible = lines.filter((line) => line.fleet !== 'none')
+      points.push({
+        id: `transit:${stop.id}`,
+        layer: 'transit',
+        refId: stop.id,
+        title: `Parada ${stop.name}`,
+        categoryLabel: 'Parada de ônibus',
+        description:
+          lines.length > 0
+            ? `Linhas ${lines.map((line) => line.code).join(', ')}. ${pluralize(accessible.length, 'linha acessível', 'linhas acessíveis')}.`
+            : 'Nenhuma linha cadastrada para esta parada.',
+        addressLabel: `${stop.addressHint} — ${neighborhoodName(db, stop.neighborhoodId)}`,
+        location: stop.location,
+        icon: 'bus',
+        color: 'blue',
+        to: paths.mobilityStop(stop.id),
+        meta: stop.features.includes('tactile_paving') ? 'Com piso tátil' : undefined,
       })
     }
   }

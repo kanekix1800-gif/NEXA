@@ -48,7 +48,8 @@ export interface NewsArticle {
 
 // ── Mapa inteligente ──
 
-export type MapLayer = 'demands' | 'businesses' | 'institutions' | 'events' | 'services'
+export type MapLayer =
+  'demands' | 'businesses' | 'institutions' | 'events' | 'services' | 'accessibility' | 'transit'
 
 export const MAP_LAYER_LABEL: Record<MapLayer, string> = {
   demands: 'Problemas',
@@ -56,6 +57,8 @@ export const MAP_LAYER_LABEL: Record<MapLayer, string> = {
   institutions: 'Instituições',
   events: 'Eventos',
   services: 'Serviços',
+  accessibility: 'Acessibilidade',
+  transit: 'Ônibus',
 }
 
 /** Ponto exibido no mapa, já normalizado a partir das entidades do sistema. */

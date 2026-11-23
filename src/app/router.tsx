@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react'
 import { createHashRouter, Outlet, ScrollRestoration, type RouteObject } from 'react-router'
 
+import { ReaderButton, RouteAnnouncer, SkipLink } from '@/components/accessibility'
 import { AREA_ROLES } from '@/services/permissions'
 
 import { PublicOnly, RequireAuth, RequireRole } from './guards'
@@ -52,8 +53,11 @@ const focused: RouteHandle = { hideBottomNav: true }
 function RootLayout() {
   return (
     <>
+      <SkipLink />
+      <RouteAnnouncer />
       <ScrollRestoration />
       <Outlet />
+      <ReaderButton />
     </>
   )
 }
@@ -158,6 +162,9 @@ const appRoutes: RouteObject[] = [
 
   // Mapa inteligente
   { path: paths.map, lazy: page(() => import('@/features/map/pages/MapPage')) },
+
+  // Mobilidade acessível (ônibus, barreiras e apoios, alertas)
+  { path: paths.mobility, lazy: page(() => import('@/features/mobility/pages/MobilityPage')) },
 
   // Comércio local
   {
@@ -271,6 +278,11 @@ export const routes: RouteObject[] = [
       // Documentos legais: acessíveis com ou sem sessão.
       { path: paths.terms, element: <LegalPage kind="terms" /> },
       { path: paths.privacy, element: <LegalPage kind="privacy" /> },
+      // Acessibilidade: vale para o aparelho, por isso abre com ou sem sessão.
+      {
+        path: paths.accessibility,
+        lazy: page(() => import('@/features/accessibility/pages/AccessibilityPage')),
+      },
       {
         element: <RequireAuth />,
         children: [{ element: <AppLayout />, children: appRoutes }],

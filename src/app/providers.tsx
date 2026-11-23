@@ -1,10 +1,11 @@
-import { QueryClientProvider, useQuery } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { MotionConfig } from 'motion/react'
 import { useEffect, useRef, type ReactNode } from 'react'
 
 import { notify, Toaster } from '@/components/ui/toast'
-import { AuthProvider, useAuth } from '@/contexts/AuthContext'
-import { repos, subscribeToDataChanges, subscribeToPersistErrors } from '@/repositories'
+import { AuthProvider } from '@/contexts/AuthContext'
+import { useAccessibilityPreferences } from '@/hooks/useAccessibility'
+import { subscribeToDataChanges, subscribeToPersistErrors } from '@/repositories'
 
 import { queryClient } from './queryClient'
 
@@ -42,28 +43,14 @@ function DataChangeBridge() {
   return null
 }
 
-/** Aplica a preferência de movimento do usuário (Configurações → Movimento). */
+/**
+ * Aplica a preferência de movimento (Acessibilidade → Reduzir animações) às animações
+ * feitas em código. As transições em CSS são tratadas por `data-motion` no <html>.
+ */
 function MotionPreference({ children }: { children: ReactNode }) {
-  const { user } = useAuth()
-  const settings = useQuery({
-    queryKey: ['settings', user?.id ?? 'anon'],
-    queryFn: () => repos.settings.get(),
-    enabled: Boolean(user),
-  })
-  const preference = user ? (settings.data?.motion ?? 'system') : 'system'
-
-  useEffect(() => {
-    const root = document.documentElement
-    if (preference === 'reduced') root.dataset.motion = 'reduce'
-    else delete root.dataset.motion
-  }, [preference])
-
+  const { motion } = useAccessibilityPreferences()
   return (
-    <MotionConfig
-      reducedMotion={preference === 'reduced' ? 'always' : preference === 'full' ? 'never' : 'user'}
-    >
-      {children}
-    </MotionConfig>
+    <MotionConfig reducedMotion={motion === 'reduced' ? 'always' : 'user'}>{children}</MotionConfig>
   )
 }
 

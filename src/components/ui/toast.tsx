@@ -1,15 +1,20 @@
 import { Toaster as SonnerToaster, toast } from 'sonner'
 
+import { useAccessibilityPreferences } from '@/hooks/useAccessibility'
+import { signalNotice } from '@/services/accessibility/feedback'
 import { toUserMessage } from '@/utils/errors'
 
 /** Área de avisos temporários do app (uma única instância, na raiz). */
 export function Toaster() {
+  const { longerNotices } = useAccessibilityPreferences()
   return (
     <SonnerToaster
       position="top-center"
       offset={16}
       mobileOffset={12}
-      duration={3200}
+      duration={longerNotices ? 10_000 : 3200}
+      closeButton={longerNotices}
+      containerAriaLabel="Avisos"
       toastOptions={{
         classNames: {
           toast:
@@ -25,15 +30,30 @@ export function Toaster() {
   )
 }
 
-/** Avisos temporários ("toasts"). */
+/**
+ * Avisos temporários ("toasts"). Conforme as opções de acessibilidade, cada aviso
+ * também toca um som, vibra o aparelho e é lido em voz alta.
+ */
 export const notify = {
-  success: (message: string, description?: string) => toast.success(message, { description }),
-  error: (message: string, description?: string) => toast.error(message, { description }),
-  info: (message: string, description?: string) => toast.info(message, { description }),
-  warning: (message: string, description?: string) => toast.warning(message, { description }),
+  success: (message: string, description?: string) => {
+    signalNotice('success', message, description)
+    return toast.success(message, { description })
+  },
+  error: (message: string, description?: string) => {
+    signalNotice('error', message, description)
+    return toast.error(message, { description })
+  },
+  info: (message: string, description?: string) => {
+    signalNotice('info', message, description)
+    return toast.info(message, { description })
+  },
+  warning: (message: string, description?: string) => {
+    signalNotice('warning', message, description)
+    return toast.warning(message, { description })
+  },
 }
 
 /** Exibe um erro com mensagem amigável (extraída de `AppError` quando houver). */
 export function notifyError(error: unknown, fallback?: string): void {
-  toast.error(toUserMessage(error, fallback))
+  notify.error(toUserMessage(error, fallback))
 }

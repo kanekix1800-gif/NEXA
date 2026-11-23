@@ -9,8 +9,8 @@ import { cn } from '@/utils/cn'
 import { initials } from '@/utils/text'
 
 const SIZES = {
-  xs: 'size-6 text-[9px]',
-  sm: 'size-8 text-[11px]',
+  xs: 'size-6 text-[0.5625rem]',
+  sm: 'size-8 text-[0.6875rem]',
   md: 'size-10 text-xs',
   lg: 'size-12 text-sm',
   xl: 'size-16 text-lg',

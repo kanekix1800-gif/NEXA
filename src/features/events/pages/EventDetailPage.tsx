@@ -26,6 +26,7 @@ import {
   SectionHeader,
   Skeleton,
 } from '@/components/ui'
+import { PlaceAccessibility } from '@/components/domain/PlaceAccessibility'
 import { useAction } from '@/hooks/useAction'
 import { repos } from '@/repositories'
 import type { EventView } from '@/types'
@@ -74,8 +75,10 @@ function EventContent({ event }: { event: EventView }) {
         <InfoRow icon={Clock}>{formatEventTimeRange(event.startsAt, event.endsAt)}</InfoRow>
         <InfoRow icon={MapPin}>
           <span className="font-bold">{event.venue}</span>
-          {event.address && <span className="text-ink-500 block text-[13px]">{event.address}</span>}
-          <span className="text-ink-500 block text-[13px]">{event.neighborhoodName}</span>
+          {event.address && (
+            <span className="text-ink-500 block text-[0.8125rem]">{event.address}</span>
+          )}
+          <span className="text-ink-500 block text-[0.8125rem]">{event.neighborhoodName}</span>
         </InfoRow>
       </Card>
 
@@ -98,7 +101,7 @@ function EventContent({ event }: { event: EventView }) {
         ) : event.attendingByMe ? (
           <>
             <p className="text-nexa-800 flex items-center gap-1.5 text-sm font-bold">
-              <CircleCheck className="size-[18px]" aria-hidden /> Você confirmou presença
+              <CircleCheck className="size-[1.125rem]" aria-hidden /> Você confirmou presença
             </p>
             <Button variant="outline" loading={attend.pending} onClick={() => void attend.run()}>
               Cancelar participação
@@ -118,10 +121,12 @@ function EventContent({ event }: { event: EventView }) {
 
       <section className="flex flex-col gap-2">
         <SectionHeader title="Sobre o evento" />
-        <p className="text-ink-700 text-[15px] leading-relaxed whitespace-pre-line">
+        <p className="text-ink-700 text-[0.9375rem] leading-relaxed whitespace-pre-line">
           {event.description}
         </p>
       </section>
+
+      <PlaceAccessibility features={event.accessibility} subject="Este evento" />
 
       <section className="flex flex-col gap-3">
         <SectionHeader title="Organização" />
@@ -132,13 +137,13 @@ function EventContent({ event }: { event: EventView }) {
             size="lg"
           />
           <div className="min-w-0 flex-1">
-            <p className="text-ink-900 truncate text-[15px] font-bold">
+            <p className="text-ink-900 truncate text-[0.9375rem] font-bold">
               {event.organizerView.name}
             </p>
             <p className="text-ink-500 text-xs">Organizador</p>
           </div>
           {event.organizerView.to && (
-            <Link to={event.organizerView.to} className="text-nexa-800 text-[13px] font-bold">
+            <Link to={event.organizerView.to} className="text-nexa-800 text-[0.8125rem] font-bold">
               Ver perfil
             </Link>
           )}

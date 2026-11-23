@@ -156,9 +156,13 @@ export function Callout({ tone = 'info', title, children, icon, action, classNam
   const Icon = icon ?? style.Icon
   return (
     <div
-      className={cn('flex gap-3 rounded-2xl p-3.5 text-[13px] leading-snug', style.box, className)}
+      className={cn(
+        'flex gap-3 rounded-2xl p-3.5 text-[0.8125rem] leading-snug',
+        style.box,
+        className,
+      )}
     >
-      <Icon className={cn('mt-0.5 size-[18px] shrink-0', style.icon)} aria-hidden />
+      <Icon className={cn('mt-0.5 size-[1.125rem] shrink-0', style.icon)} aria-hidden />
       <div className="min-w-0 flex-1">
         {title && <p className="font-bold">{title}</p>}
         {children && <div className={cn(title && 'mt-0.5', 'opacity-90')}>{children}</div>}

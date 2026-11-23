@@ -67,8 +67,8 @@ function ManagePanel({ demand }: { demand: DemandView }) {
     <>
       <Card tone="soft" className="flex flex-col gap-3">
         <div>
-          <p className="text-ink-900 text-[15px] font-bold">Gestão da demanda</p>
-          <p className="text-ink-600 text-[13px]">
+          <p className="text-ink-900 text-[0.9375rem] font-bold">Gestão da demanda</p>
+          <p className="text-ink-600 text-[0.8125rem]">
             Publique uma atualização para o morador e os apoiadores.
           </p>
         </div>
@@ -155,7 +155,7 @@ function DemandContent({ demand }: { demand: DemandView }) {
         <h2 className="text-ink-900 text-[1.375rem] leading-tight font-extrabold">
           {demand.title}
         </h2>
-        <p className="text-ink-500 text-[13px]">
+        <p className="text-ink-500 text-[0.8125rem]">
           Protocolo <strong className="text-ink-700">{demand.protocol}</strong> · registrada{' '}
           {timeAgo(demand.createdAt).toLowerCase()}
         </p>
@@ -166,7 +166,7 @@ function DemandContent({ demand }: { demand: DemandView }) {
             photoUrl={demand.author.photoUrl}
             size="sm"
           />
-          <p className="text-ink-600 text-[13px]">
+          <p className="text-ink-600 text-[0.8125rem]">
             por{' '}
             <strong className="text-ink-900">{demand.isMine ? 'você' : demand.author.name}</strong>
             {demand.neighborhoodName && ` · ${demand.neighborhoodName}`}
@@ -174,7 +174,7 @@ function DemandContent({ demand }: { demand: DemandView }) {
         </div>
       </header>
 
-      <p className="text-ink-700 text-[15px] leading-relaxed whitespace-pre-line">
+      <p className="text-ink-700 text-[0.9375rem] leading-relaxed whitespace-pre-line">
         {demand.description}
       </p>
 
@@ -256,7 +256,7 @@ function DemandContent({ demand }: { demand: DemandView }) {
           <Card className="flex items-center gap-3.5">
             <IconTile icon={demand.institution.icon} color={demand.institution.color} size="lg" />
             <div className="min-w-0 flex-1">
-              <p className="text-ink-900 truncate text-[15px] font-bold">
+              <p className="text-ink-900 truncate text-[0.9375rem] font-bold">
                 {demand.institution.name}
               </p>
               <p className="text-ink-500 text-xs">Possível responsável (encaminhamento sugerido)</p>

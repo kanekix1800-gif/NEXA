@@ -39,6 +39,9 @@ function emptyDatabase(now: Date): Database {
     notifications: [],
     news: [],
     aiConversations: [],
+    transitLines: [],
+    transitStops: [],
+    accessPoints: [],
   }
 }
 
@@ -76,11 +79,30 @@ describe('banco local', () => {
     expect(second.read((db) => db.neighborhoods.map((n) => n.id))).toEqual(['nb_centro', 'nb_vila'])
   })
 
-  it('descarta dados de uma versão antiga do esquema', async () => {
-    const outdated = emptyDatabase(new Date())
-    outdated.meta.schemaVersion = DATABASE_SCHEMA_VERSION - 1
-    outdated.neighborhoods.push(vila)
-    const store = new LocalStore({ adapter: createMemoryAdapter(outdated), seed: emptyDatabase })
+  it('atualiza a base da versão anterior sem apagar o que existia', async () => {
+    const previous: Partial<Database> = emptyDatabase(new Date())
+    previous.meta!.schemaVersion = 1
+    previous.neighborhoods!.push(vila)
+    // A versão 1 ainda não tinha as coleções de mobilidade.
+    delete previous.transitLines
+    delete previous.transitStops
+    delete previous.accessPoints
+    const adapter = createMemoryAdapter(previous)
+    const store = new LocalStore({ adapter, seed: emptyDatabase })
+    await store.init()
+
+    expect(store.read((db) => db.neighborhoods.map((nb) => nb.id))).toEqual(['nb_centro', vila.id])
+    expect(store.read((db) => db.meta.schemaVersion)).toBe(DATABASE_SCHEMA_VERSION)
+    expect(store.read((db) => db.transitLines)).toEqual([])
+    // A base atualizada é gravada no aparelho.
+    expect((await adapter.load())?.meta?.schemaVersion).toBe(DATABASE_SCHEMA_VERSION)
+  })
+
+  it('descarta dados de uma versão desconhecida do esquema', async () => {
+    const unknown = emptyDatabase(new Date())
+    unknown.meta.schemaVersion = DATABASE_SCHEMA_VERSION + 5
+    unknown.neighborhoods.push(vila)
+    const store = new LocalStore({ adapter: createMemoryAdapter(unknown), seed: emptyDatabase })
     await store.init()
     expect(store.read((db) => db.neighborhoods)).toHaveLength(1)
   })

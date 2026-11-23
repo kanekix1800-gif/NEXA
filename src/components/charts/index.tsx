@@ -47,7 +47,7 @@ export function ChartCard({
 }: ChartCardProps) {
   return (
     <section className={cn('rounded-card bg-surface shadow-card p-4', className)}>
-      <h3 className="text-ink-900 text-[15px] font-bold">{title}</h3>
+      <h3 className="text-ink-900 text-[0.9375rem] font-bold">{title}</h3>
       {subtitle && <p className="text-ink-500 text-xs">{subtitle}</p>}
       <div className={cn('mt-3', height)}>
         {empty ? (

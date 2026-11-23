@@ -1,5 +1,5 @@
 import { ArrowLeft } from 'lucide-react'
-import { Link, useNavigate } from 'react-router'
+import { Link, useLocation, useNavigate } from 'react-router'
 
 import { Logo } from '@/components/brand/Logo'
 import { PRIVACY_SECTIONS, TERMS_SECTIONS } from '@/data/legal'
@@ -10,6 +10,7 @@ import { paths } from '../paths'
 /** Termos de uso e aviso de privacidade — acessíveis com ou sem sessão. */
 export function LegalPage({ kind }: { kind: 'terms' | 'privacy' }) {
   const navigate = useNavigate()
+  const location = useLocation()
   const sections = kind === 'terms' ? TERMS_SECTIONS : PRIVACY_SECTIONS
   const title = kind === 'terms' ? 'Termos de uso' : 'Aviso de privacidade'
 
@@ -18,7 +19,11 @@ export function LegalPage({ kind }: { kind: 'terms' | 'privacy' }) {
       <header className="flex h-16 items-center justify-between">
         <button
           type="button"
-          onClick={() => navigate(-1)}
+          onClick={() => {
+            // Aberta por link direto, não há tela anterior dentro do app.
+            if (location.key !== 'default') navigate(-1)
+            else navigate(paths.welcome, { replace: true })
+          }}
           aria-label="Voltar"
           className="text-ink-800 hover:bg-ink-100 -ml-2.5 flex size-11 items-center justify-center rounded-full"
         >
@@ -39,7 +44,7 @@ export function LegalPage({ kind }: { kind: 'terms' | 'privacy' }) {
             replace
             aria-current={tab.active ? 'page' : undefined}
             className={cn(
-              'inline-flex h-9 items-center rounded-full px-4 text-[13px] font-bold',
+              'inline-flex h-9 items-center rounded-full px-4 text-[0.8125rem] font-bold',
               tab.active ? 'bg-nexa-900 text-white' : 'text-ink-600',
             )}
           >
@@ -54,8 +59,8 @@ export function LegalPage({ kind }: { kind: 'terms' | 'privacy' }) {
         <div className="mt-6 flex flex-col gap-6">
           {sections.map((section) => (
             <section key={section.id}>
-              <h2 className="text-ink-900 text-[17px] font-bold">{section.title}</h2>
-              <div className="text-ink-700 mt-2 flex flex-col gap-2 text-[15px] leading-relaxed">
+              <h2 className="text-ink-900 text-[1.0625rem] font-bold">{section.title}</h2>
+              <div className="text-ink-700 mt-2 flex flex-col gap-2 text-[0.9375rem] leading-relaxed">
                 {section.paragraphs.map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
                 ))}

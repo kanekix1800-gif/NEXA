@@ -20,6 +20,7 @@ import { matchesSearch } from '@/utils/text'
 
 import type { EventInput, EventsRepository } from '../contracts'
 import {
+  accessibilityFeatures,
   neighborhoodName,
   optionalGeoPoint,
   optionalImage,
@@ -231,6 +232,12 @@ export function createEventsRepository(ctx: LocalContext): EventsRepository {
           if (event.status === 'cancelled' && !showCancelled) return false
           if (when === 'upcoming' && isPast(event)) return false
           if (when === 'past' && !isPast(event)) return false
+          if (
+            filters.neighborhoodId !== undefined &&
+            event.neighborhoodId !== filters.neighborhoodId
+          ) {
+            return false
+          }
           if (filters.categoryId !== undefined && event.categoryId !== filters.categoryId)
             return false
           if (filters.attendeeId !== undefined && !event.attendeeIds.includes(filters.attendeeId)) {
@@ -275,6 +282,7 @@ export function createEventsRepository(ctx: LocalContext): EventsRepository {
         const neighborhoodId = validateNeighborhood(db, input.neighborhoodId)
         const location = optionalGeoPoint(input.location, 'location')
         const capacity = validateCapacity(input.capacity)
+        const accessibility = accessibilityFeatures(input.accessibility)
         const imageUrl = optionalImage(input.imageUrl, 'imageUrl')
         const illustration = validateIllustration(input.illustration)
         const organizer = resolveOrganizer(db, user, input.organizerAs)
@@ -290,6 +298,7 @@ export function createEventsRepository(ctx: LocalContext): EventsRepository {
           neighborhoodId,
           organizer,
           attendeeIds: [],
+          accessibility,
           status: 'scheduled',
           createdBy: user.id,
           createdAt: nowISO(),
@@ -367,6 +376,9 @@ export function createEventsRepository(ctx: LocalContext): EventsRepository {
           }
           if (capacity === undefined) delete next.capacity
           else next.capacity = capacity
+        }
+        if (patch.accessibility !== undefined) {
+          next.accessibility = accessibilityFeatures(patch.accessibility)
         }
         if (patch.imageUrl !== undefined) {
           const imageUrl = optionalImage(patch.imageUrl, 'imageUrl')

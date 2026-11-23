@@ -59,7 +59,7 @@ export default function OnboardingPage() {
               className="min-h-32 text-center"
             >
               <h1 className="text-ink-900 text-2xl leading-tight font-extrabold">{step.title}</h1>
-              <p className="text-ink-500 mx-auto mt-3 max-w-xs text-[15px] leading-relaxed">
+              <p className="text-ink-500 mx-auto mt-3 max-w-xs text-[0.9375rem] leading-relaxed">
                 {step.description}
               </p>
             </motion.div>

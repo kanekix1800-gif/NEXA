@@ -32,16 +32,19 @@ Cada aparelho guarda a sua própria cópia dos dados. O que um jurado cria no ce
 
 Dica: deixe uma segunda aba já aberta no perfil de comerciante (`#/entrar?demo=merchant`) para não gastar tempo trocando de conta.
 
-| Tempo       | O que mostrar                                                                                                                                                  | Caminho na tela                                                                                                                                                           |
-| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0:00 – 0:30 | **Proposta.** Abertura com a marca e entrada pelo acesso rápido.                                                                                               | Abertura → **Entrar** → **Entrar como morador**                                                                                                                           |
-| 0:30 – 1:30 | **O morador registra um problema.** Categoria, relato, sugestões da NEXA IA (prioridade, instituição provável, demandas parecidas), local no mapa e protocolo. | **Demandas** → **Registrar demanda** → "Buraco na rua" → título e descrição → **Pedir sugestões à NEXA IA** → tocar no mapa → **Enviar demanda** → **Acompanhar demanda** |
-| 1:30 – 2:10 | **A comunidade enxerga.** A demanda aparece no feed e no mapa. Curtir, comentar e filtrar.                                                                     | **Comunidade** (publicação automática da demanda) → **Mapa** (camadas Problemas, Comércio, Instituições, Eventos e Serviços)                                              |
-| 2:10 – 2:45 | **Comércio e eventos.** Vitrine do estabelecimento, favoritos e presença em evento.                                                                            | **Comércio Local** → Padaria do Bairro → favoritar · **Eventos** → abrir um evento → **Confirmar participação**                                                           |
-| 2:45 – 3:10 | **NEXA IA.** Resposta com dados do aplicativo e atalhos para as telas.                                                                                         | **NEXA IA** → "Sugerir comércios perto de mim"                                                                                                                            |
-| 3:10 – 4:10 | **O comerciante administra o negócio.** Painel com faturamento e gráficos, venda que baixa o estoque e recomendações.                                          | Perfil de comerciante → **NEXA Business** → **Vendas** → **Registrar venda** → **Conferir estoque** → aba **NEXA IA**                                                     |
-| 4:10 – 4:45 | **Instituição e administração.** A instituição atualiza o status (o morador é notificado) e a equipe modera denúncias.                                         | Perfil de instituição → **Painel institucional** → abrir uma demanda → **Atualizar status** · Perfil de administrador → **Moderação**                                     |
-| 4:45 – 5:00 | **Fechamento.** Modelo de planos, privacidade e próximos passos.                                                                                               | **Perfil** → **Planos** · **Configurações**                                                                                                                               |
+| Tempo       | O que mostrar                                                                                                                                                  | Caminho na tela                                                                                                                                                                  |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0:00 – 0:30 | **Proposta.** Abertura com a marca e entrada pelo acesso rápido.                                                                                               | Abertura → **Entrar** → **Entrar como morador**                                                                                                                                  |
+| 0:30 – 1:20 | **O morador registra um problema.** Categoria, relato, sugestões da NEXA IA (prioridade, instituição provável, demandas parecidas), local no mapa e protocolo. | **Demandas** → **Registrar demanda** → "Buraco na rua" → título e descrição → **Pedir sugestões à NEXA IA** → tocar no mapa → **Enviar demanda** → **Acompanhar demanda**        |
+| 1:20 – 1:50 | **A comunidade enxerga.** A demanda aparece no feed e no mapa. Curtir, comentar e filtrar.                                                                     | **Comunidade** (publicação automática da demanda) → **Mapa** (camadas Problemas, Comércio, Instituições, Eventos, Serviços, Acessibilidade e Ônibus)                             |
+| 1:50 – 2:15 | **Comércio e eventos.** Vitrine do estabelecimento, recursos de acessibilidade do local, favoritos e presença em evento.                                       | **Comércio Local** → filtro **Sem degraus** → Padaria do Bairro → favoritar · **Eventos** → abrir um evento → **Confirmar participação**                                         |
+| 2:15 – 2:35 | **NEXA IA.** Resposta com dados do aplicativo e atalhos para as telas.                                                                                         | **NEXA IA** → "Sugerir comércios perto de mim" ou "Ônibus acessíveis e barreiras"                                                                                                |
+| 2:35 – 3:25 | **Acessibilidade.** O app fala as telas e o que é tocado, amplia o texto e avisa de escadas no caminho por voz, som e vibração.                                | **Acessibilidade** → perfil **Sou cego(a)** (deixe o som do aparelho ligado) → **Mobilidade acessível** → **Ônibus** (filtro Acessíveis) → **Alertas** → **Iniciar a simulação** |
+| 3:25 – 4:10 | **O comerciante administra o negócio.** Painel com faturamento e gráficos, venda que baixa o estoque e recomendações.                                          | Perfil de comerciante → **NEXA Business** → **Vendas** → **Registrar venda** → **Conferir estoque** → aba **NEXA IA**                                                            |
+| 4:10 – 4:45 | **Instituição e administração.** A instituição atualiza o status (o morador é notificado) e a equipe modera denúncias.                                         | Perfil de instituição → **Painel institucional** → abrir uma demanda → **Atualizar status** · Perfil de administrador → **Moderação**                                            |
+| 4:45 – 5:00 | **Fechamento.** Modelo de planos, privacidade e próximos passos.                                                                                               | **Perfil** → **Planos** · **Configurações**                                                                                                                                      |
+
+Depois de mostrar a acessibilidade, toque de novo no perfil **Sou cego(a)** para desligar a voz antes de seguir.
 
 Para recomeçar a demonstração do zero: **Perfil → Configurações → Restaurar dados demonstrativos** (também disponível na tela **Entrar**).
 
@@ -66,11 +69,11 @@ Tudo o que está listado abaixo funciona no protótipo, com os dados guardados n
 
 ### Mapa inteligente
 
-- OpenStreetMap com cinco camadas que podem ser ligadas e desligadas (problemas, comércios, instituições, eventos e serviços), cartão de detalhes ao tocar em um ponto e atalhos "ver no mapa" a partir das outras telas.
+- OpenStreetMap com sete camadas que podem ser ligadas e desligadas (problemas, comércio, instituições, eventos, serviços, acessibilidade e ônibus), cartão de detalhes ao tocar em um ponto e atalhos "ver no mapa" a partir das outras telas.
 
 ### Comércio local
 
-- Catálogo com busca, categorias, "abertos agora", distância, favoritos, avaliações, produtos e horários. Cadastro e edição do estabelecimento pelo comerciante.
+- Catálogo com busca, categorias, "abertos agora", "sem degraus", filtro por bairro, distância, favoritos, avaliações, produtos e horários. Cadastro e edição do estabelecimento pelo comerciante, inclusive dos recursos de acessibilidade do local.
 
 ### NEXA Business (comerciantes)
 
@@ -79,6 +82,30 @@ Tudo o que está listado abaixo funciona no protótipo, com os dados guardados n
 ### NEXA IA
 
 - Conversa com sugestões de perguntas, respostas com atalhos para as telas e histórico. Veja [NEXA IA: modos de funcionamento](#nexa-ia-modos-de-funcionamento).
+
+### Acessibilidade
+
+Uma tela completa, aberta com ou sem login, a partir da abertura, da tela Entrar, da tela inicial e do Perfil. As opções valem para o aparelho e ficam guardadas só nele.
+
+- **Perfis prontos**, que ligam de uma vez as opções mais úteis: cegueira, baixa visão, surdez, mobilidade reduzida, dislexia e sensibilidade a movimento.
+- **Ver e ler:** três tamanhos de texto (ampliam também botões e áreas de toque), alto contraste, fonte de alta legibilidade (Atkinson Hyperlegible) ou para dislexia (OpenDyslexic), espaçamento ampliado e foco realçado.
+- **Voz:** o app fala o nome de cada tela, o item tocado ou selecionado e os avisos; botão "Ouvir tela" em todas as telas; escolha da voz, da velocidade e do tom. A leitura é feita pela voz do próprio aparelho.
+- **Sons e vibração** para confirmações, erros e alertas, com volume ajustável.
+- **Tempo e movimento:** avisos por mais tempo e animações reduzidas.
+- **Ditado por voz** na NEXA IA, nas publicações e nas demandas.
+- **Para quem usa leitor de tela** (TalkBack, VoiceOver): cada troca de tela é anunciada, há um atalho "Pular para o conteúdo" e os controles têm nome e estado.
+
+### Mobilidade acessível
+
+- **Ônibus:** linhas com elevador, piso baixo, espaço para cadeira de rodas e aviso sonoro ou visual das paradas; próximas partidas; paradas com piso tátil e abrigo; filtros por recurso e por bairro; e as linhas sem acessibilidade identificadas, com a alternativa.
+- **No caminho:** escadas, degraus, calçadas danificadas e travessias sem sinal sonoro, cada uma com um caminho alternativo e destaque para quem é cego ou tem baixa visão; e também rampas, elevadores, piso tátil, semáforos sonoros, banheiros e vagas acessíveis. Tudo aparece no mapa.
+- **Alertas de proximidade:** ao se aproximar de uma barreira, o app avisa por voz, som e vibração e sugere o desvio. Funciona com a localização do aparelho e tem uma simulação de percurso para demonstrar.
+- **Locais:** estabelecimentos, serviços públicos e eventos informam os recursos que oferecem (entrada sem degraus, banheiro acessível, braille, Libras e outros).
+- Todo cartão tem um botão **Ouvir**, que lê a informação em frases completas.
+
+### Bairros
+
+- 32 bairros em cinco regiões, escolhidos em uma lista com busca pelo nome ou pela região (sem diferenciar acentos). O mesmo seletor filtra o comércio e as linhas de ônibus por bairro.
 
 ### Instituições
 
@@ -99,7 +126,7 @@ Tudo o que está listado abaixo funciona no protótipo, com os dados guardados n
 
 ### Base demonstrativa
 
-A base inicial tem 24 usuários (12 moradores), 8 estabelecimentos, 4 instituições, 8 serviços públicos, 15 publicações, 12 demandas, 8 eventos, 15 notificações e cerca de dois meses de vendas da Padaria do Bairro. As datas são relativas ao dia do acesso: ao abrir o aplicativo em outro dia, toda a base avança junto e continua atual.
+A base inicial tem 24 usuários (12 moradores), 32 bairros, 8 estabelecimentos, 4 instituições, 8 serviços públicos, 15 publicações, 12 demandas, 8 eventos, 15 notificações, 8 linhas de ônibus com 16 paradas, 18 barreiras e apoios no caminho e cerca de dois meses de vendas da Padaria do Bairro. As datas são relativas ao dia do acesso: ao abrir o aplicativo em outro dia, toda a base avança junto e continua atual. Quando o aplicativo ganha conteúdo novo, a base de quem já o usava é atualizada sem apagar o que a pessoa criou.
 
 ## Tecnologias
 
@@ -212,10 +239,12 @@ Como o GitHub Pages hospeda apenas arquivos estáticos, o serviço da IA precisa
 src/
   app/            rotas, guardas de acesso, layout e navegação
   components/     design system (ui), marca e ilustrações, mapa, gráficos e cartões de domínio
-  features/       telas por módulo (auth, home, community, demands, map, businesses,
-                  business-management, ai, institutions, events, notifications, profile, admin)
+  features/       telas por módulo (auth, home, community, demands, map, mobility, businesses,
+                  business-management, ai, institutions, events, notifications, profile,
+                  accessibility, admin)
   repositories/   contratos e implementação local da camada de dados
-  services/       regras de negócio: permissões, status de demandas, métricas e IA
+  services/       regras de negócio: permissões, status de demandas, métricas, IA,
+                  acessibilidade (preferências, voz, sons) e mobilidade (horários, alertas)
   data/           base demonstrativa e conteúdos estáticos
   types/          modelo de dados
 server/           serviço opcional da NEXA IA
@@ -226,6 +255,8 @@ e2e/              testes ponta a ponta
 
 **Regras centralizadas.** Permissões por perfil ficam em `src/services/permissions.ts`, as transições de status em `src/services/demands/status.ts` e os cálculos do negócio em `src/services/business`. Valores em dinheiro são sempre inteiros, em centavos.
 
+**Acessibilidade.** As preferências do aparelho ficam em `src/services/accessibility` e são aplicadas como atributos no documento antes de a interface ser desenhada; os estilos correspondentes estão em `src/styles/index.css`. Como o layout usa unidades relativas, ampliar o texto amplia também os espaçamentos e as áreas de toque.
+
 ## Segurança, privacidade e acessibilidade
 
 - Nenhuma chave privada no site. A chave da IA existe apenas no serviço em `server/`.
@@ -235,7 +266,8 @@ e2e/              testes ponta a ponta
 - Localização do aparelho só com autorização, desligada por padrão e usada de forma aproximada. As demandas exibem "localização aproximada".
 - Direitos previstos na LGPD ao alcance do usuário: aviso de privacidade, termos de uso, cópia dos próprios dados e exclusão da conta, em **Configurações**.
 - Denúncia e moderação de conteúdo.
-- Acessibilidade: navegação por teclado, rótulos para leitores de tela, foco tratado em janelas e menus, áreas de toque amplas e opção de reduzir animações. Não foi feita auditoria formal com leitores de tela.
+- Preferências de acessibilidade guardadas somente no aparelho: o NEXA não registra nenhuma informação sobre deficiência. A posição usada nos alertas de barreiras vale apenas enquanto a tela está aberta.
+- Acessibilidade: navegação por teclado, rótulos e estados para leitores de tela, anúncio das trocas de tela, foco tratado em janelas e menus, áreas de toque amplas e nenhuma rolagem horizontal em telas de 360 px, mesmo com o texto no tamanho máximo. Não foi feita auditoria formal nem teste com pessoas com deficiência.
 
 ## Testes
 
@@ -245,8 +277,8 @@ npx playwright install      # apenas na primeira vez: baixa os navegadores
 npm run test:e2e            # ponta a ponta
 ```
 
-- **Unitários e de integração (Vitest):** todos os repositórios, permissões, transições de status, métricas do negócio, vendas e estoque, consistência da base demonstrativa e o serviço da NEXA IA com um provedor simulado.
-- **Ponta a ponta (Playwright):** os seis fluxos principais (demanda, comunidade, comércio, gestão do negócio, NEXA IA e evento), permissões, atualização institucional com notificação, moderação, restauração da base, cadastro e login, acesso por QR Code e troca de perfil por link. Rodam em celular simulado com Chromium e com WebKit (motor do Safari), além de verificações de layout em desktop.
+- **Unitários e de integração (Vitest):** todos os repositórios, permissões, transições de status, métricas do negócio, vendas e estoque, consistência da base demonstrativa, preferências de acessibilidade, descrição falada dos elementos, horários de ônibus, alertas de proximidade, atualização de bases antigas e o serviço da NEXA IA com um provedor simulado.
+- **Ponta a ponta (Playwright):** os seis fluxos principais (demanda, comunidade, comércio, gestão do negócio, NEXA IA e evento), permissões, atualização institucional com notificação, moderação, restauração da base, cadastro e login, acesso por QR Code, troca de perfil por link, opções de acessibilidade (texto, contraste, perfis prontos e voz, conferindo o que seria falado), ônibus acessíveis, barreiras, simulação de alertas e busca de bairros. Rodam em celular simulado com Chromium e com WebKit (motor do Safari), além de verificações de layout em desktop.
 
 ## Limitações conhecidas
 
@@ -257,6 +289,9 @@ npm run test:e2e            # ponta a ponta
 - **Recuperação de senha simulada** e notificações apenas dentro do aplicativo (sem push, e-mail ou SMS).
 - **Mapa depende de internet.** Os blocos do mapa vêm dos servidores públicos do OpenStreetMap, adequados para demonstração, mas não para uso intenso. Não há busca de endereços: o local é marcado no mapa.
 - **Armazenamento local.** Fotos ficam no aparelho e estão sujeitas ao limite de espaço do navegador.
+- **Voz, vibração e ditado dependem do aparelho.** As vozes são as instaladas no sistema, a vibração não existe no iPhone e o ditado usa o reconhecimento de fala do navegador, que pode enviar o áudio ao fabricante. Quem usa leitor de tela deve manter a voz do NEXA desligada.
+- **Mobilidade demonstrativa.** Linhas, horários, paradas, barreiras e apoios são fictícios, e os recursos de acessibilidade dos locais são declarados, sem vistoria. Os alertas de proximidade só funcionam com a tela aberta e não substituem bengala, cão-guia ou atenção ao caminho.
+- **Sem Libras no conteúdo.** O aplicativo indica onde há atendimento em Libras, mas não traduz os próprios textos.
 - **Compatibilidade.** Testado de forma automatizada em Chromium e WebKit. Não houve bateria de testes em aparelhos físicos.
 - **Limite de pedidos da IA em memória.** Atrás de um proxy, o limite vale para todos os usuários juntos.
 
@@ -267,11 +302,12 @@ npm run test:e2e            # ponta a ponta
 3. Integração com canais oficiais de atendimento (ouvidorias, protocolos municipais) e verificação de instituições.
 4. Notificações push e por e-mail.
 5. Busca de endereços e provedor próprio de mapas.
-6. Auditoria de acessibilidade e testes em aparelhos físicos.
-7. Definição de preços e meio de pagamento para os planos.
+6. Auditoria de acessibilidade, testes com pessoas com deficiência e em aparelhos físicos.
+7. Dados reais de transporte e de acessibilidade urbana (por exemplo, GTFS das empresas de ônibus e mapeamentos colaborativos), com tradução para Libras.
+8. Definição de preços e meio de pagamento para os planos.
 
 ## Créditos
 
 - Dados e blocos de mapa: © colaboradores do [OpenStreetMap](https://www.openstreetmap.org/copyright).
-- Ícones [Lucide](https://lucide.dev) e fonte Plus Jakarta Sans.
+- Ícones [Lucide](https://lucide.dev) e fontes Plus Jakarta Sans, Atkinson Hyperlegible e OpenDyslexic (licença SIL Open Font).
 - As ilustrações e o logotipo foram desenhados em SVG para este projeto.

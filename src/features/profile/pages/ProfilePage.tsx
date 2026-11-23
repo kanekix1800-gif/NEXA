@@ -1,4 +1,6 @@
 import {
+  Accessibility,
+  BusFront,
   CalendarDays,
   ChartColumn,
   CircleHelp,
@@ -41,7 +43,7 @@ function row(icon: LucideIcon, title: string, to: string, description?: string) 
   return (
     <ListRow
       key={to}
-      leading={<Icon className="text-nexa-800 size-[22px]" aria-hidden />}
+      leading={<Icon className="text-nexa-800 size-[1.375rem]" aria-hidden />}
       title={title}
       description={description}
       to={to}
@@ -120,11 +122,26 @@ export default function ProfilePage() {
         )}
 
         <ListGroup>
+          {row(
+            Accessibility,
+            'Acessibilidade',
+            paths.accessibility,
+            'Texto, contraste, voz, sons e vibração',
+          )}
+          {row(
+            BusFront,
+            'Mobilidade acessível',
+            paths.mobility,
+            'Ônibus, barreiras e alertas no caminho',
+          )}
+        </ListGroup>
+
+        <ListGroup>
           {row(Crown, 'Planos', paths.plans)}
           {row(Settings, 'Configurações', paths.settings)}
           {row(CircleHelp, 'Ajuda e Suporte', paths.help)}
           <ListRow
-            leading={<LogOut className="text-danger-600 size-[22px]" aria-hidden />}
+            leading={<LogOut className="text-danger-600 size-[1.375rem]" aria-hidden />}
             title="Sair"
             tone="danger"
             hideChevron

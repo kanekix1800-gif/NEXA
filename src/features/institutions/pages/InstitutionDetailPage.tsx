@@ -68,7 +68,7 @@ function InstitutionContent({ institution }: { institution: InstitutionView }) {
         </ButtonLink>
       )}
 
-      <p className="text-ink-700 text-[15px] leading-relaxed">{institution.description}</p>
+      <p className="text-ink-700 text-[0.9375rem] leading-relaxed">{institution.description}</p>
 
       <div className="grid grid-cols-2 gap-3">
         <StatCard
@@ -151,10 +151,12 @@ function InstitutionContent({ institution }: { institution: InstitutionView }) {
                   )}
                   <div className="p-4">
                     <div className="flex items-start justify-between gap-2">
-                      <h3 className="text-ink-900 text-[15px] font-bold">{initiative.title}</h3>
+                      <h3 className="text-ink-900 text-[0.9375rem] font-bold">
+                        {initiative.title}
+                      </h3>
                       {initiative.status === 'finished' && <Badge color="neutral">Encerrada</Badge>}
                     </div>
-                    <p className="text-ink-600 mt-1 text-[13px] leading-snug">
+                    <p className="text-ink-600 mt-1 text-[0.8125rem] leading-snug">
                       {initiative.description}
                     </p>
                     <p className="text-ink-400 mt-2 text-xs">{timeAgo(initiative.createdAt)}</p>

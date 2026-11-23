@@ -3,7 +3,8 @@ import { ChevronRight, RotateCcw, Send, Sparkles, Trash2 } from 'lucide-react'
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link, useSearchParams } from 'react-router'
 
-import { ActionMenu, AppIcon, ConfirmDialog, DemoBadge, IconButton } from '@/components/ui'
+import { DictationButton } from '@/components/accessibility'
+import { ActionMenu, AppIcon, ConfirmDialog, DemoBadge, IconButton, notify } from '@/components/ui'
 import { config } from '@/config'
 import { useCurrentUser } from '@/contexts/AuthContext'
 import { repos } from '@/repositories'
@@ -37,7 +38,7 @@ function Bubble({ message, onRetry }: { message: AIMessage; onRetry?: () => void
     <div className={cn('flex flex-col gap-2', mine ? 'items-end' : 'items-start')}>
       <div
         className={cn(
-          'max-w-[88%] px-4 py-3 text-[15px] leading-relaxed whitespace-pre-line',
+          'max-w-[88%] px-4 py-3 text-[0.9375rem] leading-relaxed whitespace-pre-line',
           mine
             ? 'bg-nexa-900 rounded-3xl rounded-br-lg text-white'
             : message.error
@@ -79,7 +80,7 @@ function Bubble({ message, onRetry }: { message: AIMessage; onRetry?: () => void
             <Link
               key={action.to + action.label}
               to={action.to}
-              className="border-nexa-800 text-nexa-900 hover:bg-nexa-50 inline-flex h-9 items-center gap-1.5 rounded-full border px-3.5 text-[13px] font-bold transition-colors"
+              className="border-nexa-800 text-nexa-900 hover:bg-nexa-50 inline-flex h-9 items-center gap-1.5 rounded-full border px-3.5 text-[0.8125rem] font-bold transition-colors"
             >
               {action.icon && <AppIcon name={action.icon} className="size-4" />}
               {action.label}
@@ -92,7 +93,7 @@ function Bubble({ message, onRetry }: { message: AIMessage; onRetry?: () => void
         <button
           type="button"
           onClick={onRetry}
-          className="text-nexa-800 inline-flex items-center gap-1 text-[13px] font-bold"
+          className="text-nexa-800 inline-flex items-center gap-1 text-[0.8125rem] font-bold"
         >
           <RotateCcw className="size-3.5" /> Tentar novamente
         </button>
@@ -193,7 +194,7 @@ export default function AssistantPage() {
             ]}
             trigger={
               <IconButton label="Opções da conversa" size="sm">
-                <Trash2 className="size-[18px]" />
+                <Trash2 className="size-[1.125rem]" />
               </IconButton>
             }
           />
@@ -240,7 +241,7 @@ export default function AssistantPage() {
       </div>
 
       {AI_MODE === 'live' && (
-        <p className="border-line text-ink-500 border-t px-5 pt-2 text-[11px] leading-snug">
+        <p className="border-line text-ink-500 border-t px-5 pt-2 text-[0.6875rem] leading-snug">
           Suas perguntas são enviadas a um serviço de IA externo para gerar a resposta, junto de
           dados públicos do aplicativo. Não informe dados pessoais.
         </p>
@@ -264,7 +265,16 @@ export default function AssistantPage() {
           placeholder="Digite sua pergunta…"
           autoComplete="off"
           enterKeyHint="send"
-          className="border-line bg-surface text-ink-900 placeholder:text-ink-400 focus:border-nexa-600 focus:ring-nexa-100 h-12 min-w-0 flex-1 rounded-full border px-5 text-[15px] outline-none focus:ring-4"
+          className="border-line bg-surface text-ink-900 placeholder:text-ink-400 focus:border-nexa-600 focus:ring-nexa-100 h-12 min-w-0 flex-1 rounded-full border px-5 text-[0.9375rem] outline-none focus:ring-4"
+        />
+        <DictationButton
+          field="a pergunta"
+          onText={(spoken) =>
+            setText((current) =>
+              `${current} ${spoken}`.trim().slice(0, config.limits.aiQuestionMaxLength),
+            )
+          }
+          onError={(message) => notify.warning(message)}
         />
         <IconButton
           type="submit"

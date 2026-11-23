@@ -30,7 +30,7 @@ function Insights({ business }: { business: BusinessView }) {
         </span>
         <div className="min-w-0">
           <h2 className="text-lg leading-tight font-extrabold">NEXA IA Empresarial</h2>
-          <p className="text-[13px] text-white/75">
+          <p className="text-[0.8125rem] text-white/75">
             Recomendações geradas a partir das vendas, do estoque e das finanças de {business.name}.
           </p>
         </div>
@@ -44,7 +44,7 @@ function Insights({ business }: { business: BusinessView }) {
         className="self-start"
       />
 
-      <ul className="grid gap-3 lg:grid-cols-2">
+      <ul className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         {insights.map((insight) => {
           const Icon =
             insight.tone === 'warning'
@@ -69,10 +69,10 @@ function Insights({ business }: { business: BusinessView }) {
                   <Icon className="size-5" aria-hidden />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <h3 className="text-ink-900 text-[15px] leading-snug font-bold">
+                  <h3 className="text-ink-900 text-[0.9375rem] leading-snug font-bold">
                     {insight.title}
                   </h3>
-                  <p className="text-ink-600 mt-1 text-[13px] leading-snug">
+                  <p className="text-ink-600 mt-1 text-[0.8125rem] leading-snug">
                     {insight.description}
                   </p>
                 </div>

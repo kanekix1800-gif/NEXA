@@ -87,7 +87,7 @@ export default function BrandGallery() {
               <Illustration name={key} />
             </div>
             <div className="flex items-center gap-3">
-              <div className="size-[72px] shrink-0 overflow-hidden rounded-2xl">
+              <div className="size-[4.5rem] shrink-0 overflow-hidden rounded-2xl">
                 <Illustration name={key} />
               </div>
               <div className="aspect-[21/9] flex-1 overflow-hidden rounded-2xl">

@@ -71,7 +71,7 @@ export function ShareAppDialog({ open, onOpenChange }: ShareAppDialogProps) {
         <div className="shadow-card rounded-3xl bg-white p-3">
           <QrCode value={url} label="QR Code para abrir o NEXA" className="size-56" />
         </div>
-        <p className="text-ink-600 text-center text-[13px]">
+        <p className="text-ink-600 text-center text-[0.8125rem]">
           {target === 'home'
             ? 'Abre a tela inicial do NEXA.'
             : `Entra direto no perfil demonstrativo de ${USER_ROLE_LABEL[target].toLowerCase()}, sem cadastro e sem senha.`}
@@ -91,7 +91,7 @@ export function ShareAppButton({ className }: { className?: string }) {
         type="button"
         onClick={() => setOpen(true)}
         className={cn(
-          'text-nexa-800 inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-3 text-[13px] font-bold',
+          'text-nexa-800 inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-3 text-[0.8125rem] font-bold',
           className,
         )}
       >

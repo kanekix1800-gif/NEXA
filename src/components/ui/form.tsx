@@ -35,7 +35,7 @@ interface FieldContextValue {
 const FieldContext = createContext<FieldContextValue | null>(null)
 
 /** Props de acessibilidade herdadas do `Field` mais próximo (se houver). */
-function useFieldControl(props: { id?: string; 'aria-describedby'?: string }) {
+export function useFieldControl(props: { id?: string; 'aria-describedby'?: string }) {
   const field = useContext(FieldContext)
   return {
     id: props.id ?? field?.id,
@@ -69,7 +69,7 @@ export function Field({ label, hint, error, required, counter, children, classNa
     >
       <div className={cn('flex flex-col gap-1.5', className)}>
         <div className="flex items-baseline justify-between gap-3">
-          <label htmlFor={id} className="text-ink-800 text-[13px] font-bold">
+          <label htmlFor={id} className="text-ink-800 text-[0.8125rem] font-bold">
             {label}
             {required && (
               <span className="text-danger-500 ml-0.5" aria-hidden>
@@ -77,7 +77,7 @@ export function Field({ label, hint, error, required, counter, children, classNa
               </span>
             )}
           </label>
-          {counter && <span className="text-ink-400 text-[11px] tabular-nums">{counter}</span>}
+          {counter && <span className="text-ink-400 text-[0.6875rem] tabular-nums">{counter}</span>}
         </div>
         {children}
         {error ? (
@@ -96,7 +96,7 @@ export function Field({ label, hint, error, required, counter, children, classNa
 }
 
 const CONTROL =
-  'w-full rounded-2xl border border-line bg-surface text-[15px] text-ink-900 placeholder:text-ink-400 outline-none transition-[border-color,box-shadow] focus:border-nexa-600 focus:ring-4 focus:ring-nexa-100 disabled:bg-ink-50 disabled:text-ink-400 aria-[invalid=true]:border-danger-500 aria-[invalid=true]:focus:ring-danger-50'
+  'w-full rounded-2xl border border-line bg-surface text-[0.9375rem] text-ink-900 placeholder:text-ink-400 outline-none transition-[border-color,box-shadow] focus:border-nexa-600 focus:ring-4 focus:ring-nexa-100 disabled:bg-ink-50 disabled:text-ink-400 aria-[invalid=true]:border-danger-500 aria-[invalid=true]:focus:ring-danger-50'
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   leftIcon?: ReactNode
@@ -181,7 +181,7 @@ export function PasswordInput(props: Omit<InputProps, 'type' | 'rightSlot'>) {
           aria-pressed={visible}
           className="text-ink-500 hover:bg-ink-100 flex size-9 items-center justify-center rounded-full"
         >
-          {visible ? <EyeOff className="size-[18px]" /> : <Eye className="size-[18px]" />}
+          {visible ? <EyeOff className="size-[1.125rem]" /> : <Eye className="size-[1.125rem]" />}
         </button>
       }
     />
@@ -208,7 +208,7 @@ export function SearchInput({
   return (
     <div className={cn('relative', className)}>
       <Search
-        className="text-ink-400 pointer-events-none absolute top-1/2 left-4 size-[18px] -translate-y-1/2"
+        className="text-ink-400 pointer-events-none absolute top-1/2 left-4 size-[1.125rem] -translate-y-1/2"
         aria-hidden
       />
       <input
@@ -219,7 +219,7 @@ export function SearchInput({
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
         aria-label={label}
-        className="border-line bg-surface text-ink-900 placeholder:text-ink-400 focus:border-nexa-600 focus:ring-nexa-100 h-12 w-full rounded-full border pr-11 pl-11 text-[15px] outline-none focus:ring-4 [&::-webkit-search-cancel-button]:hidden"
+        className="border-line bg-surface text-ink-900 placeholder:text-ink-400 focus:border-nexa-600 focus:ring-nexa-100 h-12 w-full rounded-full border pr-11 pl-11 text-[0.9375rem] outline-none focus:ring-4 [&::-webkit-search-cancel-button]:hidden"
       />
       {value !== '' && (
         <button
@@ -531,7 +531,7 @@ export function RadioCardGroup<T extends string>({
           >
             {option.icon}
             <span className="min-w-0">
-              <span className="text-ink-900 block text-[13px] leading-tight font-bold">
+              <span className="text-ink-900 block text-[0.8125rem] leading-tight font-bold">
                 {option.title}
               </span>
               {option.description && (

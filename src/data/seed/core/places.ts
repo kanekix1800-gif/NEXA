@@ -22,6 +22,7 @@ import {
   type InstitutionKey,
 } from '../cast'
 import type { SeedContext } from '../context'
+import { BUSINESS_ACCESSIBILITY, SERVICE_ACCESSIBILITY } from './mobility'
 
 /**
  * Telefone fictício: DDD "00" (inexistente) + 9 + dígitos sequenciais.
@@ -38,6 +39,7 @@ export function buildNeighborhoods(ctx: SeedContext): Neighborhood[] {
     id: nb.id,
     name: nb.name,
     center: ctx.point(nb.offset),
+    zone: nb.zone,
   }))
 }
 
@@ -239,6 +241,7 @@ export function buildPublicServices(ctx: SeedContext): PublicService[] {
       hours: content.hours,
       phone: phone(content.phoneNumber),
       ...(institution ? { institutionId: institution.id } : {}),
+      accessibility: [...SERVICE_ACCESSIBILITY[key]],
       icon: svc.icon,
       color: svc.color,
     }
@@ -376,6 +379,7 @@ export function buildBusinesses(ctx: SeedContext): Business[] {
         instagram: content.instagram,
         schedule: content.schedule,
         tags: content.tags,
+        accessibility: [...BUSINESS_ACCESSIBILITY[key]],
         settings: { allowNegativeStock: false },
         isDemo: true,
         status: 'active',

@@ -59,7 +59,7 @@ export function CommentSection({
           maxLength={config.limits.commentMaxLength}
           onChange={(event) => setText(event.target.value)}
           placeholder={placeholder}
-          className="border-line bg-surface text-ink-900 placeholder:text-ink-400 focus:border-nexa-600 focus:ring-nexa-100 max-h-32 min-h-12 flex-1 resize-none rounded-3xl border px-4 py-3 text-[15px] outline-none focus:ring-4"
+          className="border-line bg-surface text-ink-900 placeholder:text-ink-400 focus:border-nexa-600 focus:ring-nexa-100 max-h-32 min-h-12 flex-1 resize-none rounded-3xl border px-4 py-3 text-[0.9375rem] outline-none focus:ring-4"
         />
         <IconButton
           type="submit"
@@ -98,7 +98,7 @@ export function CommentSection({
                     />
                   </Link>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[13px]">
+                    <p className="text-[0.8125rem]">
                       <span className="text-ink-900 font-bold">{comment.author.name}</span>{' '}
                       <time className="text-ink-400 text-xs" dateTime={comment.createdAt}>
                         · {timeAgo(comment.createdAt)}

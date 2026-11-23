@@ -17,7 +17,7 @@ export function AppIcon({ name, className }: { name: IconKey; className?: string
 }
 
 const TILE_SIZES = {
-  sm: 'size-9 [&_svg]:size-[18px]',
+  sm: 'size-9 [&_svg]:size-[1.125rem]',
   md: 'size-11 [&_svg]:size-5',
   lg: 'size-14 [&_svg]:size-6',
 } as const
@@ -119,7 +119,7 @@ export function StatCard({
         {value}
       </div>
       {(change !== undefined || hint) && (
-        <div className="mt-1 flex flex-wrap items-center gap-x-1.5 text-[11px] font-semibold">
+        <div className="mt-1 flex flex-wrap items-center gap-x-1.5 text-[0.6875rem] font-semibold">
           {change !== undefined && (
             <span
               className={cn(
@@ -198,7 +198,9 @@ export function DateBadge({ date, className }: { date: ISODate | Date; className
       )}
     >
       <span className="text-ink-900 text-xl font-extrabold">{day}</span>
-      <span className="text-sun-700 mt-0.5 text-[10px] font-extrabold tracking-wider">{month}</span>
+      <span className="text-sun-700 mt-0.5 text-[0.625rem] font-extrabold tracking-wider">
+        {month}
+      </span>
     </span>
   )
 }
@@ -288,7 +290,7 @@ export function InfoRow({
 }) {
   return (
     <div className={cn('text-ink-700 flex items-start gap-2.5 text-sm', className)}>
-      <Icon className="text-nexa-800 mt-0.5 size-[18px] shrink-0" aria-hidden />
+      <Icon className="text-nexa-800 mt-0.5 size-[1.125rem] shrink-0" aria-hidden />
       <div className="min-w-0 flex-1">{children}</div>
     </div>
   )
@@ -331,7 +333,7 @@ export function Timeline({ items, className }: { items: TimelineItem[]; classNam
                 {item.date && <span className="text-ink-400 text-xs">{item.date}</span>}
               </div>
               {item.description && (
-                <div className="text-ink-600 mt-0.5 text-[13px] leading-snug">
+                <div className="text-ink-600 mt-0.5 text-[0.8125rem] leading-snug">
                   {item.description}
                 </div>
               )}

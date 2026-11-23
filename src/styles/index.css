@@ -269,7 +269,7 @@
   }
 }
 
-/* Movimento reduzido forçado pelas configurações do app (data-motion="reduce" no <html>). */
+/* Movimento reduzido pedido em Acessibilidade → Reduzir animações (data-motion="reduce" no <html>). */
 html[data-motion='reduce'] *,
 html[data-motion='reduce'] *::before,
 html[data-motion='reduce'] *::after {
@@ -277,6 +277,93 @@ html[data-motion='reduce'] *::after {
   animation-iteration-count: 1 !important;
   transition-duration: 0.01ms !important;
   scroll-behavior: auto !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Acessibilidade
+   Cada opção da tela Acessibilidade vira um atributo data-* no <html>
+   (ver services/accessibility/preferences.ts). Como o layout usa rem, aumentar a
+   fonte da raiz amplia textos, espaçamentos e áreas de toque juntos.
+   ───────────────────────────────────────────────────────────────────────────── */
+html[data-text-scale='large'] {
+  font-size: 112.5%;
+}
+html[data-text-scale='xlarge'] {
+  font-size: 125%;
+}
+
+/* Fontes alternativas (carregadas apenas quando escolhidas). */
+html[data-font='legible'] {
+  --font-sans: 'Atkinson Hyperlegible', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+html[data-font='dyslexia'] {
+  --font-sans: 'OpenDyslexic', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+html[data-font] body {
+  font-feature-settings: normal;
+}
+html[data-font] :is(h1, h2, h3, h4) {
+  letter-spacing: 0;
+}
+
+/* Espaçamento ampliado entre letras, palavras e linhas. */
+html[data-text-spacing='wide'] body {
+  letter-spacing: 0.03em;
+  word-spacing: 0.14em;
+}
+html[data-text-spacing='wide'] :is(p, li, label, dd, dt, summary, td, th) {
+  line-height: 1.75;
+}
+
+/* Alto contraste: textos mais escuros, linhas visíveis e fundos brancos. */
+html[data-contrast='high'] {
+  --color-ink-300: #4a5550;
+  --color-ink-400: #2f4038;
+  --color-ink-500: #1b332a;
+  --color-ink-600: #102820;
+  --color-ink-700: #0a1c16;
+  --color-ink-800: #06130f;
+  --color-ink-900: #000000;
+  --color-line: #5d665f;
+  --color-line-strong: #1b332a;
+  --color-canvas: #ffffff;
+  --color-cream-50: #ffffff;
+  --color-cream-100: #ffffff;
+  --color-nexa-600: #0b6048;
+  --color-nexa-700: #064d3b;
+  --color-nexa-800: #03352a;
+  --color-nexa-900: #02261e;
+  --color-sun-600: #8f5208;
+  --color-sun-700: #6e3f08;
+  --color-danger-500: #8c2e1b;
+  --color-danger-600: #7a2616;
+  --color-info-500: #1c4860;
+  --color-info-600: #163a4e;
+  --color-teal-600: #14545a;
+  --color-blue-600: #214577;
+  --color-purple-600: #4f3880;
+  --color-pink-600: #84325a;
+  --color-terracotta-600: #8f3420;
+  --color-gold-700: #5c4800;
+}
+html[data-contrast='high'] :is(.shadow-card, .shadow-raised) {
+  border: 1.5px solid var(--color-line-strong);
+}
+html[data-contrast='high'] ::placeholder {
+  color: var(--color-ink-500);
+  opacity: 1;
+}
+
+/* Foco realçado: contorno grosso em duas cores (visível sobre qualquer fundo) e links sublinhados. */
+html[data-focus='strong'] :focus-visible {
+  outline: 4px solid var(--color-sun-400);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 7px #102820;
+}
+html[data-focus='strong'] :is(p, li, label, span, dd) > a {
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────

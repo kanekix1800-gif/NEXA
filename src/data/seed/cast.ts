@@ -29,15 +29,69 @@ export type Offset = readonly [northMeters: number, eastMeters: number]
 export interface CastNeighborhood {
   id: ID
   name: string
+  /** Região da cidade, usada para agrupar e buscar. */
+  zone: string
   offset: Offset
 }
 
+const CENTRAL = 'Região Central'
+const NORTE = 'Zona Norte'
+const SUL = 'Zona Sul'
+const LESTE = 'Zona Leste'
+const OESTE = 'Zona Oeste'
+
+/**
+ * Os cinco primeiros concentram o conteúdo demonstrativo (pessoas, comércios, demandas
+ * e eventos). Os demais ampliam a cidade para quem se cadastra ou registra algo novo.
+ */
 export const NEIGHBORHOODS = {
-  centro: { id: 'nb_centro', name: 'Centro', offset: [0, 0] },
-  vila: { id: 'nb_vila', name: 'Vila Esperança', offset: [900, -700] },
-  jardim: { id: 'nb_jardim', name: 'Jardim das Flores', offset: [-800, 900] },
-  parque: { id: 'nb_parque', name: 'Parque das Águas', offset: [700, 1100] },
-  alto: { id: 'nb_alto', name: 'Alto da Serra', offset: [-1000, -900] },
+  centro: { id: 'nb_centro', name: 'Centro', zone: CENTRAL, offset: [0, 0] },
+  vila: { id: 'nb_vila', name: 'Vila Esperança', zone: NORTE, offset: [900, -700] },
+  jardim: { id: 'nb_jardim', name: 'Jardim das Flores', zone: SUL, offset: [-800, 900] },
+  parque: { id: 'nb_parque', name: 'Parque das Águas', zone: LESTE, offset: [700, 1100] },
+  alto: { id: 'nb_alto', name: 'Alto da Serra', zone: OESTE, offset: [-1000, -900] },
+
+  boaVista: { id: 'nb_boa_vista', name: 'Boa Vista', zone: CENTRAL, offset: [-450, -350] },
+  vilaNova: { id: 'nb_vila_nova', name: 'Vila Nova', zone: CENTRAL, offset: [450, 500] },
+  santaLuzia: { id: 'nb_santa_luzia', name: 'Santa Luzia', zone: CENTRAL, offset: [-300, 650] },
+
+  saoJose: { id: 'nb_sao_jose', name: 'São José', zone: NORTE, offset: [1900, -200] },
+  primavera: { id: 'nb_primavera', name: 'Jardim Primavera', zone: NORTE, offset: [2600, 600] },
+  aurora: { id: 'nb_aurora', name: 'Vila Aurora', zone: NORTE, offset: [3300, -500] },
+  moradaSol: { id: 'nb_morada_sol', name: 'Morada do Sol', zone: NORTE, offset: [2200, -1500] },
+  horizonte: { id: 'nb_horizonte', name: 'Novo Horizonte', zone: NORTE, offset: [4100, 300] },
+  recanto: { id: 'nb_recanto', name: 'Recanto Verde', zone: NORTE, offset: [3000, 1700] },
+
+  santaClara: { id: 'nb_santa_clara', name: 'Santa Clara', zone: SUL, offset: [-1900, 300] },
+  america: { id: 'nb_america', name: 'Jardim América', zone: SUL, offset: [-2600, -500] },
+  operaria: { id: 'nb_operaria', name: 'Vila Operária', zone: SUL, offset: [-3300, 500] },
+  industrial: { id: 'nb_industrial', name: 'Parque Industrial', zone: SUL, offset: [-4100, -200] },
+  belaVista: { id: 'nb_bela_vista', name: 'Bela Vista', zone: SUL, offset: [-2300, 1500] },
+  cidadeJardim: {
+    id: 'nb_cidade_jardim',
+    name: 'Cidade Jardim',
+    zone: SUL,
+    offset: [-3200, -1600],
+  },
+
+  uniao: { id: 'nb_uniao', name: 'Vila União', zone: LESTE, offset: [200, 2100] },
+  paraiso: { id: 'nb_paraiso', name: 'Jardim Paraíso', zone: LESTE, offset: [1300, 2700] },
+  lagoa: { id: 'nb_lagoa', name: 'Lagoa Azul', zone: LESTE, offset: [-700, 2900] },
+  portal: { id: 'nb_portal', name: 'Portal do Sol', zone: LESTE, offset: [500, 3700] },
+  vale: { id: 'nb_vale', name: 'Vale Verde', zone: LESTE, offset: [-1700, 3400] },
+  ipes: { id: 'nb_ipes', name: 'Residencial dos Ipês', zone: LESTE, offset: [1900, 3900] },
+
+  saoFrancisco: {
+    id: 'nb_sao_francisco',
+    name: 'São Francisco',
+    zone: OESTE,
+    offset: [300, -2000],
+  },
+  europa: { id: 'nb_europa', name: 'Jardim Europa', zone: OESTE, offset: [-900, -2700] },
+  vilaRica: { id: 'nb_vila_rica', name: 'Vila Rica', zone: OESTE, offset: [1300, -2800] },
+  colina: { id: 'nb_colina', name: 'Colina Verde', zone: OESTE, offset: [-200, -3600] },
+  chacaras: { id: 'nb_chacaras', name: 'Chácaras Reunidas', zone: OESTE, offset: [1700, -4000] },
+  monteAlegre: { id: 'nb_monte_alegre', name: 'Monte Alegre', zone: OESTE, offset: [-2000, -3200] },
 } as const satisfies Record<string, CastNeighborhood>
 
 export type NeighborhoodKey = keyof typeof NEIGHBORHOODS

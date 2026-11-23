@@ -73,12 +73,12 @@ export default function PlansPage() {
       <PageHeader title="Planos" variant="stack" backTo={paths.profile} width="wide" />
       <Page width="wide">
         <div className="flex flex-col gap-6">
-          <p className="text-ink-600 max-w-2xl text-[15px]">
+          <p className="text-ink-600 max-w-2xl text-[0.9375rem]">
             O NEXA é gratuito para a comunidade. Recursos avançados para negócios e instituições
             sustentam a plataforma.
           </p>
 
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
             {PLANS.map((plan) => {
               const action = planAction(plan.id, user.role)
               return (
@@ -126,7 +126,7 @@ export default function PlansPage() {
                   </p>
                   <p
                     className={cn(
-                      'text-[13px] leading-snug',
+                      'text-[0.8125rem] leading-snug',
                       plan.highlight ? 'text-white/80' : 'text-ink-600',
                     )}
                   >
@@ -137,7 +137,7 @@ export default function PlansPage() {
                       <li
                         key={feature}
                         className={cn(
-                          'flex items-start gap-2 text-[13px]',
+                          'flex items-start gap-2 text-[0.8125rem]',
                           plan.highlight ? 'text-white/90' : 'text-ink-700',
                         )}
                       >
@@ -166,7 +166,7 @@ export default function PlansPage() {
           <section className="flex flex-col gap-3">
             <SectionHeader title="Comparação de recursos" />
             <div className="bg-surface rounded-card shadow-card overflow-x-auto">
-              <table className="w-full min-w-[640px] text-left text-[13px]">
+              <table className="w-full min-w-[640px] text-left text-[0.8125rem]">
                 <thead>
                   <tr className="border-line border-b">
                     <th scope="col" className="text-ink-500 px-4 py-3 font-semibold">
@@ -195,12 +195,12 @@ export default function PlansPage() {
                           <td key={plan.id} className="px-3 py-2.5 text-center">
                             {value === true ? (
                               <Check
-                                className="text-nexa-700 mx-auto size-[18px]"
+                                className="text-nexa-700 mx-auto size-[1.125rem]"
                                 aria-label="Incluído"
                               />
                             ) : value === false ? (
                               <Minus
-                                className="text-ink-300 mx-auto size-[18px]"
+                                className="text-ink-300 mx-auto size-[1.125rem]"
                                 aria-label="Não incluído"
                               />
                             ) : (

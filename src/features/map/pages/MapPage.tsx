@@ -16,10 +16,22 @@ import {
   Spinner,
 } from '@/components/ui'
 import { repos } from '@/repositories'
+import { getPreferences } from '@/services/accessibility/preferences'
 import { MAP_LAYER_LABEL, type MapLayer } from '@/types'
 import { cn } from '@/utils/cn'
 
-const LAYERS: MapLayer[] = ['demands', 'businesses', 'institutions', 'events', 'services']
+const LAYERS: MapLayer[] = [
+  'demands',
+  'businesses',
+  'institutions',
+  'events',
+  'services',
+  'accessibility',
+  'transit',
+]
+
+/** Camadas de mobilidade: começam ligadas só para quem pediu destaques em Acessibilidade. */
+const MOBILITY_LAYERS: MapLayer[] = ['accessibility', 'transit']
 
 const LAYER_DOT: Record<MapLayer, string> = {
   demands: 'bg-terracotta-600',
@@ -27,11 +39,28 @@ const LAYER_DOT: Record<MapLayer, string> = {
   institutions: 'bg-nexa-800',
   events: 'bg-purple-600',
   services: 'bg-blue-600',
+  accessibility: 'bg-teal-600',
+  transit: 'bg-blue-600',
+}
+
+function initialLayers(only: MapLayer | null, focusId: string | null): Set<MapLayer> {
+  if (only && LAYERS.includes(only)) return new Set([only])
+  const layers = new Set(LAYERS.filter((layer) => !MOBILITY_LAYERS.includes(layer)))
+  const highlights = getPreferences().highlights
+  if (highlights.includes('step_free') || highlights.includes('audio_tactile')) {
+    layers.add('accessibility')
+  }
+  if (highlights.includes('accessible_transit')) layers.add('transit')
+  // Um ponto em foco sempre aparece, mesmo que a camada dele comece desligada.
+  const focusLayer = focusId?.split(':')[0] as MapLayer | undefined
+  if (focusLayer && LAYERS.includes(focusLayer)) layers.add(focusLayer)
+  return layers
 }
 
 /**
- * Mapa inteligente: demandas, comércio, instituições, eventos e serviços em um só
- * lugar, com filtros por camada e cartão de detalhes ao tocar em um marcador.
+ * Mapa inteligente: demandas, comércio, instituições, eventos, serviços, barreiras e
+ * apoios de acessibilidade e paradas de ônibus em um só lugar, com filtros por camada
+ * e cartão de detalhes ao tocar em um marcador.
  */
 export default function MapPage() {
   const [params, setParams] = useSearchParams()
@@ -40,9 +69,7 @@ export default function MapPage() {
   // ?foco=demands:dem_01 abre com o ponto selecionado; ?camada=demands mostra só uma camada.
   const focusId = params.get('foco')
   const onlyLayer = params.get('camada') as MapLayer | null
-  const [active, setActive] = useState<Set<MapLayer>>(
-    () => new Set(onlyLayer && LAYERS.includes(onlyLayer) ? [onlyLayer] : LAYERS),
-  )
+  const [active, setActive] = useState<Set<MapLayer>>(() => initialLayers(onlyLayer, focusId))
   const [selectedId, setSelectedId] = useState<string | null>(focusId)
 
   const visible = useMemo(
@@ -93,7 +120,7 @@ export default function MapPage() {
                 aria-pressed={on}
                 onClick={() => toggle(layer)}
                 className={cn(
-                  'inline-flex h-[38px] shrink-0 items-center gap-2 rounded-full border px-3.5 text-[13px] font-semibold whitespace-nowrap transition-colors',
+                  'inline-flex h-[2.375rem] shrink-0 items-center gap-2 rounded-full border px-3.5 text-[0.8125rem] font-semibold whitespace-nowrap transition-colors',
                   on
                     ? 'border-nexa-900 bg-nexa-900 text-white'
                     : 'border-line bg-surface text-ink-500',
@@ -140,7 +167,7 @@ export default function MapPage() {
           </div>
         )}
 
-        <p className="bg-surface/90 text-ink-600 pointer-events-none absolute top-3 left-1/2 z-[500] w-max max-w-[92%] -translate-x-1/2 rounded-full px-3 py-1.5 text-center text-[11px] font-semibold shadow-card">
+        <p className="bg-surface/90 text-ink-600 pointer-events-none absolute top-3 left-1/2 z-[500] w-max max-w-[92%] -translate-x-1/2 rounded-full px-3 py-1.5 text-center text-[0.6875rem] font-semibold shadow-card">
           Marcadores fictícios — não representam locais ou ocorrências reais
         </p>
 
@@ -152,7 +179,7 @@ export default function MapPage() {
             <div className="flex items-start gap-3">
               <IconTile icon={selected.icon} color={selected.color} size="lg" />
               <div className="min-w-0 flex-1">
-                <p className="text-ink-500 text-[11px] font-bold tracking-wide uppercase">
+                <p className="text-ink-500 text-[0.6875rem] font-bold tracking-wide uppercase">
                   {MAP_LAYER_LABEL[selected.layer]} · {selected.categoryLabel}
                 </p>
                 <h2 className="text-ink-900 text-base leading-snug font-bold">{selected.title}</h2>
@@ -163,10 +190,10 @@ export default function MapPage() {
                 className="-mt-1 -mr-1.5"
                 onClick={() => select(null)}
               >
-                <X className="size-[18px]" />
+                <X className="size-[1.125rem]" />
               </IconButton>
             </div>
-            <p className="text-ink-600 mt-2 line-clamp-3 text-[13px] leading-snug">
+            <p className="text-ink-600 mt-2 line-clamp-3 text-[0.8125rem] leading-snug">
               {selected.description}
             </p>
             <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">

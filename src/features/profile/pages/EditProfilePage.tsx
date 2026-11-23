@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
@@ -15,10 +14,10 @@ import {
   StickyActionBar,
   Textarea,
 } from '@/components/ui'
+import { NeighborhoodPicker } from '@/components/domain/NeighborhoodPicker'
 import { config } from '@/config'
 import { useAuth, useCurrentUser } from '@/contexts/AuthContext'
 import { useAction } from '@/hooks/useAction'
-import { repos } from '@/repositories'
 import type { AvatarSpec } from '@/types'
 import { isAppError } from '@/utils/errors'
 import { USERNAME_RULE_MESSAGE } from '@/utils/username'
@@ -94,10 +93,6 @@ export default function EditProfilePage() {
   const user = useCurrentUser()
   const { updateProfile } = useAuth()
   const navigate = useNavigate()
-  const neighborhoods = useQuery({
-    queryKey: ['reference', 'neighborhoods'],
-    queryFn: () => repos.reference.listNeighborhoods(),
-  })
 
   const [name, setName] = useState(user.name)
   const [username, setUsername] = useState(user.username)
@@ -127,7 +122,7 @@ export default function EditProfilePage() {
           <div className="flex items-center gap-4">
             <Avatar name={name} avatar={avatar} photoUrl={photo[0]} size="2xl" />
             <div className="min-w-0 flex-1">
-              <p className="text-ink-800 mb-2 text-[13px] font-bold">Foto (opcional)</p>
+              <p className="text-ink-800 mb-2 text-[0.8125rem] font-bold">Foto (opcional)</p>
               <ImagePicker value={photo} onChange={setPhoto} max={1} label="Enviar foto" />
             </div>
           </div>
@@ -159,13 +154,7 @@ export default function EditProfilePage() {
             error={errors.neighborhoodId}
             hint="Usado para mostrar o que está perto de você."
           >
-            <Select value={neighborhoodId} onChange={(e) => setNeighborhoodId(e.target.value)}>
-              {(neighborhoods.data ?? []).map((neighborhood) => (
-                <option key={neighborhood.id} value={neighborhood.id}>
-                  {neighborhood.name}
-                </option>
-              ))}
-            </Select>
+            <NeighborhoodPicker value={neighborhoodId} onChange={setNeighborhoodId} />
           </Field>
           <Field
             label="Biografia (opcional)"
@@ -182,7 +171,7 @@ export default function EditProfilePage() {
           </Field>
 
           <fieldset className="bg-surface rounded-card shadow-card p-4">
-            <legend className="text-ink-800 float-left mb-3 text-[13px] font-bold">
+            <legend className="text-ink-800 float-left mb-3 text-[0.8125rem] font-bold">
               Avatar ilustrado
             </legend>
             <div className="clear-both grid grid-cols-2 gap-3">

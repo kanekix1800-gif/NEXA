@@ -46,7 +46,7 @@ function Reports() {
       }
     >
       {(items) => (
-        <ul className="grid gap-3 lg:grid-cols-2">
+        <ul className="grid grid-cols-1 gap-3 lg:grid-cols-2">
           {items.map((report) => (
             <li key={report.id}>
               <Card className="flex h-full flex-col gap-3">
@@ -66,8 +66,10 @@ function Reports() {
                 <p className="text-ink-900 text-sm font-bold">
                   {REPORT_REASON_LABEL[report.reason]}
                 </p>
-                {report.details && <p className="text-ink-600 text-[13px]">“{report.details}”</p>}
-                <blockquote className="bg-cream-100 text-ink-700 rounded-2xl px-3.5 py-2.5 text-[13px] leading-snug">
+                {report.details && (
+                  <p className="text-ink-600 text-[0.8125rem]">“{report.details}”</p>
+                )}
+                <blockquote className="bg-cream-100 text-ink-700 rounded-2xl px-3.5 py-2.5 text-[0.8125rem] leading-snug">
                   {report.excerpt}
                   {report.targetAuthor && (
                     <span className="text-ink-500 mt-1 block text-xs">

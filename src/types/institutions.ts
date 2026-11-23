@@ -1,3 +1,4 @@
+import type { AccessibilityFeature } from './accessibility'
 import type { ColorKey, GeoPoint, ID, ISODate, IconKey, IllustrationKey } from './common'
 
 export type InstitutionCategory =
@@ -98,6 +99,8 @@ export interface PublicService {
   phone?: string
   /** Instituição responsável pelo serviço, quando houver. */
   institutionId?: ID
+  /** Recursos de acessibilidade do local. */
+  accessibility?: AccessibilityFeature[]
   icon: IconKey
   color: ColorKey
 }

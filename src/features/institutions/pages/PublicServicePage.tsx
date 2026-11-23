@@ -17,6 +17,7 @@ import {
   PageHeader,
   SectionHeader,
 } from '@/components/ui'
+import { PlaceAccessibility } from '@/components/domain/PlaceAccessibility'
 import { repos } from '@/repositories'
 import { PUBLIC_SERVICE_KIND_LABEL } from '@/types'
 import { formatDistance, formatPhone } from '@/utils/format'
@@ -68,12 +69,14 @@ export default function PublicServicePage() {
                   </div>
                 </header>
 
-                <p className="text-ink-700 text-[15px] leading-relaxed">{item.description}</p>
+                <p className="text-ink-700 text-[0.9375rem] leading-relaxed">{item.description}</p>
 
                 <Card className="flex flex-col gap-3">
                   <InfoRow icon={MapPin}>
                     {item.address}
-                    <span className="text-ink-500 block text-[13px]">{item.neighborhoodName}</span>
+                    <span className="text-ink-500 block text-[0.8125rem]">
+                      {item.neighborhoodName}
+                    </span>
                   </InfoRow>
                   <InfoRow icon={Clock}>{item.hours}</InfoRow>
                   {item.phone && (
@@ -91,6 +94,8 @@ export default function PublicServicePage() {
                     </InfoRow>
                   )}
                 </Card>
+
+                <PlaceAccessibility features={item.accessibility} subject="Este serviço" />
 
                 <section className="flex flex-col gap-3">
                   <SectionHeader

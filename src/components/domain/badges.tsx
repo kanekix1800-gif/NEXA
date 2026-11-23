@@ -36,7 +36,7 @@ export function CategoryBadge({ category }: { category: Pick<Category, 'name' | 
 /** Marca atualizações institucionais simuladas (sem integração oficial com o órgão). */
 export function SimulatedBadge() {
   return (
-    <span className="bg-cream-200 text-ink-700 inline-flex h-5 items-center gap-1 rounded-full px-2 text-[10px] font-bold">
+    <span className="bg-cream-200 text-ink-700 inline-flex h-5 items-center gap-1 rounded-full px-2 text-[0.625rem] font-bold">
       <FlaskConical className="text-sun-600 size-3" aria-hidden />
       Simulação
     </span>

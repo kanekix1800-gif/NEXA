@@ -72,7 +72,7 @@ export function ImagePicker({
           <label
             htmlFor={inputId}
             className={cn(
-              'border-line-strong bg-surface text-ink-600 hover:bg-cream-50 flex size-24 cursor-pointer flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-dashed text-center text-[11px] font-bold transition-colors',
+              'border-line-strong bg-surface text-ink-600 hover:bg-cream-50 flex size-24 cursor-pointer flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-dashed text-center text-[0.6875rem] font-bold transition-colors',
               busy && 'pointer-events-none opacity-60',
             )}
           >

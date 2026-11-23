@@ -1,5 +1,6 @@
 import {
   Accessibility,
+  ArrowUpDown,
   Bell,
   BookOpen,
   BriefcaseBusiness,
@@ -11,6 +12,7 @@ import {
   Croissant,
   Droplets,
   Dumbbell,
+  Footprints,
   GraduationCap,
   HandHeart,
   Handshake,
@@ -23,6 +25,7 @@ import {
   MapPin,
   Megaphone,
   MessageCircle,
+  MoveUpRight,
   Music,
   Newspaper,
   Package,
@@ -39,23 +42,33 @@ import {
   ShoppingBasket,
   Sparkles,
   Sprout,
+  SquareParking,
   Star,
   Stethoscope,
   Store,
   Tent,
+  Toilet,
   TrafficCone,
   Trash2,
   Trees,
+  TrendingUp,
   TriangleAlert,
   Trophy,
   Users,
   Utensils,
+  Volume2,
   Wallet,
   Wrench,
+  createLucideIcon,
   type LucideIcon,
 } from 'lucide-react'
 
 import type { IconKey } from '@/types'
+
+/** Escada (não existe na biblioteca de ícones): degraus subindo para a direita. */
+export const StairsIcon = createLucideIcon('stairs', [
+  ['path', { d: 'M3 20h5v-5h5v-5h5V5h3', key: 'degraus' }],
+])
 
 /**
  * Mapeamento das chaves de ícone usadas nos DADOS (categorias, instituições, serviços…)
@@ -69,6 +82,15 @@ export const ICONS: Record<IconKey, LucideIcon> = {
   lightbulb: Lightbulb,
   bus: Bus,
   accessibility: Accessibility,
+  // acessibilidade e mobilidade
+  stairs: StairsIcon,
+  slope: TrendingUp,
+  ramp: MoveUpRight,
+  elevator: ArrowUpDown,
+  audio: Volume2,
+  footprints: Footprints,
+  restroom: Toilet,
+  parking: SquareParking,
   droplets: Droplets,
   alert: TriangleAlert,
   more: CircleEllipsis,

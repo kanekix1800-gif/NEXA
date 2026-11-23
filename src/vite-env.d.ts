@@ -1,5 +1,8 @@
 /// <reference types="vite-plugin-pwa/client" />
 
+/** Folhas de estilo carregadas sob demanda (ex.: fontes de acessibilidade). */
+declare module '*.css'
+
 /** Variáveis de ambiente públicas do NEXA (ver `.env.example`). */
 interface ImportMetaEnv {
   readonly VITE_AI_API_URL?: string

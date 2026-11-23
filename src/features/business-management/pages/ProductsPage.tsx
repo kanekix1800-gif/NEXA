@@ -247,7 +247,7 @@ function Products({ business }: { business: BusinessView }) {
           aria-pressed={onlyLow}
           onClick={() => setParams(onlyLow ? {} : { estoque: 'baixo' }, { replace: true })}
           className={cn(
-            'h-11 rounded-full border px-4 text-[13px] font-semibold transition-colors',
+            'h-11 rounded-full border px-4 text-[0.8125rem] font-semibold transition-colors',
             onlyLow
               ? 'border-terracotta-600 bg-terracotta-50 text-terracotta-600'
               : 'border-line bg-surface text-ink-600',
@@ -277,7 +277,7 @@ function Products({ business }: { business: BusinessView }) {
         }
       >
         {(items) => (
-          <ul className="grid gap-3 lg:grid-cols-2">
+          <ul className="grid grid-cols-1 gap-3 lg:grid-cols-2">
             {filter(items).map((product) => {
               const low = isLowStock(product)
               return (
@@ -290,7 +290,9 @@ function Products({ business }: { business: BusinessView }) {
                 >
                   <div className="flex items-start gap-3">
                     <div className="min-w-0 flex-1">
-                      <p className="text-ink-900 truncate text-[15px] font-bold">{product.name}</p>
+                      <p className="text-ink-900 truncate text-[0.9375rem] font-bold">
+                        {product.name}
+                      </p>
                       <p className="text-ink-500 text-xs">
                         {product.group ?? 'Sem grupo'} · {formatCurrency(product.priceCents)} /{' '}
                         {PRODUCT_UNIT_LABEL[product.unit]}

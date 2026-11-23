@@ -2,6 +2,7 @@
  * Modelo de domínio do NEXA.
  * Importe sempre a partir de `@/types`.
  */
+export * from './accessibility'
 export * from './ai'
 export * from './business-metrics'
 export * from './commerce'

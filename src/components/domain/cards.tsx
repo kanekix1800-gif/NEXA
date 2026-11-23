@@ -12,7 +12,7 @@ import { pluralize } from '@/utils/text'
 import { DemandStatusBadge } from './badges'
 
 const CARD =
-  'rounded-card bg-surface shadow-card hover:shadow-raised flex gap-3.5 p-3.5 transition-[box-shadow,transform] duration-150 active:scale-[0.99]'
+  'rounded-card bg-surface shadow-card hover:shadow-raised flex min-w-0 gap-3.5 p-3.5 transition-[box-shadow,transform] duration-150 active:scale-[0.99]'
 
 /** Cartão de demanda nas listagens. */
 export function DemandCard({ demand }: { demand: DemandView }) {
@@ -20,7 +20,7 @@ export function DemandCard({ demand }: { demand: DemandView }) {
     <Link to={paths.demand(demand.id)} className={CARD}>
       <IconTile icon={demand.category.icon} color={demand.category.color} size="lg" />
       <div className="min-w-0 flex-1">
-        <h3 className="text-ink-900 line-clamp-2 text-[15px] leading-snug font-bold">
+        <h3 className="text-ink-900 line-clamp-2 text-[0.9375rem] leading-snug font-bold">
           {demand.title}
         </h3>
         <p className="text-ink-500 mt-0.5 truncate text-xs">
@@ -54,7 +54,7 @@ export function BusinessCard({ business }: { business: BusinessView }) {
         className="w-20 shrink-0 rounded-2xl"
       />
       <div className="min-w-0 flex-1">
-        <h3 className="text-ink-900 truncate text-[15px] font-bold">{business.name}</h3>
+        <h3 className="text-ink-900 truncate text-[0.9375rem] font-bold">{business.name}</h3>
         <Rating value={business.rating} count={business.reviewCount} className="mt-0.5" />
         <p className="mt-1 text-xs font-semibold">
           <span className={business.isOpenNow ? 'text-nexa-700' : 'text-ink-400'}>
@@ -66,7 +66,7 @@ export function BusinessCard({ business }: { business: BusinessView }) {
       </div>
       {business.isFavorite && (
         <Heart
-          className="fill-danger-500 text-danger-500 size-[18px] shrink-0"
+          className="fill-danger-500 text-danger-500 size-[1.125rem] shrink-0"
           aria-label="Favorito"
         />
       )}
@@ -80,7 +80,7 @@ export function EventCard({ event }: { event: EventView }) {
     <Link to={paths.event(event.id)} className={CARD}>
       <DateBadge date={event.startsAt} />
       <div className="min-w-0 flex-1">
-        <h3 className="text-ink-900 line-clamp-2 text-[15px] leading-snug font-bold">
+        <h3 className="text-ink-900 line-clamp-2 text-[0.9375rem] leading-snug font-bold">
           {event.title}
         </h3>
         <p className="text-ink-500 mt-0.5 flex items-center gap-1 truncate text-xs">
@@ -112,8 +112,10 @@ export function NewsCard({ article }: { article: NewsArticle }) {
         className="w-[4.5rem] shrink-0 rounded-2xl"
       />
       <div className="min-w-0 flex-1">
-        <p className="text-nexa-700 text-[11px] font-bold tracking-wide uppercase">{article.tag}</p>
-        <h3 className="text-ink-900 line-clamp-2 text-[15px] leading-snug font-bold">
+        <p className="text-nexa-700 text-[0.6875rem] font-bold tracking-wide uppercase">
+          {article.tag}
+        </p>
+        <h3 className="text-ink-900 line-clamp-2 text-[0.9375rem] leading-snug font-bold">
           {article.title}
         </h3>
         <time className="text-ink-500 text-xs" dateTime={article.publishedAt}>
@@ -133,10 +135,10 @@ export function InstitutionRow({ institution }: { institution: InstitutionView }
     >
       <IconTile icon={institution.icon} color={institution.color} size="lg" />
       <span className="min-w-0 flex-1">
-        <span className="text-ink-900 block truncate text-[15px] font-bold">
+        <span className="text-ink-900 block truncate text-[0.9375rem] font-bold">
           {institution.name}
         </span>
-        <span className="text-ink-500 block truncate text-[13px]">{institution.tagline}</span>
+        <span className="text-ink-500 block truncate text-[0.8125rem]">{institution.tagline}</span>
       </span>
     </Link>
   )

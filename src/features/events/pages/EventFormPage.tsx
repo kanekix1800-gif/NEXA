@@ -19,11 +19,13 @@ import {
   SwitchRow,
   Textarea,
 } from '@/components/ui'
+import { NeighborhoodPicker } from '@/components/domain/NeighborhoodPicker'
+import { AccessibilityFeaturesField } from '@/components/domain/PlaceAccessibility'
 import { config } from '@/config'
 import { useCurrentUser } from '@/contexts/AuthContext'
 import { useAction } from '@/hooks/useAction'
 import { repos, type EventInput } from '@/repositories'
-import type { EventView, GeoPoint } from '@/types'
+import type { AccessibilityFeature, EventView, GeoPoint } from '@/types'
 import { now } from '@/utils/clock'
 import { addDays, fromDateTimeLocalValue, toDateTimeLocalValue } from '@/utils/dates'
 import { isAppError } from '@/utils/errors'
@@ -43,10 +45,6 @@ function EventForm({ event }: { event: EventView | null }) {
     queryKey: ['reference', 'categories', 'event'],
     queryFn: () => repos.reference.listCategories('event'),
   })
-  const neighborhoods = useQuery({
-    queryKey: ['reference', 'neighborhoods'],
-    queryFn: () => repos.reference.listNeighborhoods(),
-  })
   const institution = useQuery({
     queryKey: ['institutions', 'mine'],
     queryFn: () => repos.institutions.getMine(),
@@ -65,6 +63,9 @@ function EventForm({ event }: { event: EventView | null }) {
   const [neighborhoodId, setNeighborhoodId] = useState(event?.neighborhoodId ?? user.neighborhoodId)
   const [location, setLocation] = useState<GeoPoint | null>(event?.location ?? null)
   const [capacity, setCapacity] = useState(event?.capacity ? String(event.capacity) : '')
+  const [accessibility, setAccessibility] = useState<AccessibilityFeature[]>(
+    event?.accessibility ?? [],
+  )
   const [cover, setCover] = useState<string[]>(event?.imageUrl ? [event.imageUrl] : [])
   const [organizerAs, setOrganizerAs] = useState<OrganizerAs>('self')
   const [shareOnFeed, setShareOnFeed] = useState(true)
@@ -87,6 +88,7 @@ function EventForm({ event }: { event: EventView | null }) {
         neighborhoodId,
         location,
         capacity: capacity ? Number(capacity) : null,
+        accessibility,
         organizerAs,
         shareOnFeed,
       }
@@ -137,7 +139,7 @@ function EventForm({ event }: { event: EventView | null }) {
               placeholder="O que vai acontecer? Quem pode participar?"
             />
           </Field>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Field label="Início" error={errors.startsAt} required>
               <Input
                 type="datetime-local"
@@ -169,16 +171,10 @@ function EventForm({ event }: { event: EventView | null }) {
             />
           </Field>
           <Field label="Bairro" error={errors.neighborhoodId} required>
-            <Select value={neighborhoodId} onChange={(e) => setNeighborhoodId(e.target.value)}>
-              {(neighborhoods.data ?? []).map((neighborhood) => (
-                <option key={neighborhood.id} value={neighborhood.id}>
-                  {neighborhood.name}
-                </option>
-              ))}
-            </Select>
+            <NeighborhoodPicker value={neighborhoodId} onChange={setNeighborhoodId} />
           </Field>
           <div>
-            <p className="text-ink-800 mb-2 text-[13px] font-bold">
+            <p className="text-ink-800 mb-2 text-[0.8125rem] font-bold">
               Localização no mapa (opcional)
             </p>
             <LocationPicker
@@ -202,8 +198,16 @@ function EventForm({ event }: { event: EventView | null }) {
               onChange={(e) => setCapacity(e.target.value.replace(/\D/g, ''))}
             />
           </Field>
+          <AccessibilityFeaturesField
+            value={accessibility}
+            onChange={setAccessibility}
+            legend="Marque o que o evento oferece, como intérprete de Libras ou local sem degraus."
+            error={errors.accessibility}
+          />
           <div>
-            <p className="text-ink-800 mb-2 text-[13px] font-bold">Imagem de capa (opcional)</p>
+            <p className="text-ink-800 mb-2 text-[0.8125rem] font-bold">
+              Imagem de capa (opcional)
+            </p>
             <ImagePicker value={cover} onChange={setCover} max={1} label="Adicionar capa" />
           </div>
           {!event && (canAsInstitution || canAsBusiness) && (

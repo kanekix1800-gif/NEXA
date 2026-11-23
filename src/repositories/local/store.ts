@@ -9,6 +9,7 @@ import { now as appNow } from '@/utils/clock'
 import { AppError } from '@/utils/errors'
 
 import { rebaseDatabase } from './rebase'
+import { upgradeDatabase } from './upgrade'
 import { createMemoryAdapter, type StorageAdapter } from './storage'
 
 /**
@@ -98,7 +99,15 @@ export class LocalStore {
       return
     }
 
-    // Sem dados, versão antiga do esquema ou dados incompletos: gera nova base demonstrativa.
+    // Base gravada por uma versão anterior do app: atualiza preservando o que foi criado.
+    const upgraded = upgradeDatabase(persisted, this.now(), this.seed)
+    if (upgraded) {
+      this.db = upgraded
+      await this.persistAll()
+      return
+    }
+
+    // Sem dados ou dados incompletos: gera nova base demonstrativa.
     this.db = this.seed(this.now())
     await this.persistAll()
   }

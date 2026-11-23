@@ -68,7 +68,7 @@ export default function NewsArticlePage() {
                   <h2 className="text-ink-900 mt-2 text-[1.5rem] leading-tight font-extrabold">
                     {item.title}
                   </h2>
-                  <p className="text-ink-500 mt-1.5 text-[13px]">
+                  <p className="text-ink-500 mt-1.5 text-[0.8125rem]">
                     <time dateTime={item.publishedAt}>
                       {formatDateLong(item.publishedAt)} · {timeAgo(item.publishedAt)}
                     </time>
@@ -78,7 +78,7 @@ export default function NewsArticlePage() {
                   {item.summary}
                 </p>
                 {item.body.map((paragraph, index) => (
-                  <p key={index} className="text-ink-700 text-[15px] leading-relaxed">
+                  <p key={index} className="text-ink-700 text-[0.9375rem] leading-relaxed">
                     {paragraph}
                   </p>
                 ))}
@@ -86,7 +86,7 @@ export default function NewsArticlePage() {
                   <ButtonLink
                     to={paths.event(item.linkedEventId)}
                     variant="secondary"
-                    leftIcon={<CalendarDays className="size-[18px]" />}
+                    leftIcon={<CalendarDays className="size-[1.125rem]" />}
                   >
                     Ver evento relacionado
                   </ButtonLink>

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 
 import { paths } from '@/app/paths'
+import { DictationButton } from '@/components/accessibility'
 import { CitySilhouette } from '@/components/brand/OrganicShapes'
 import { LocationPicker } from '@/components/map'
 import {
@@ -14,6 +15,7 @@ import {
   IconTile,
   ImagePicker,
   Input,
+  notify,
   Page,
   PageHeader,
   ProgressDots,
@@ -118,7 +120,7 @@ export default function NewDemandPage() {
             <CircleCheck className="size-10" aria-hidden />
           </span>
           <h1 className="text-ink-900 text-2xl font-extrabold">Demanda registrada!</h1>
-          <p className="text-ink-600 text-[15px]">
+          <p className="text-ink-600 text-[0.9375rem]">
             Protocolo <strong className="text-ink-900">{created.protocol}</strong>. Você pode
             acompanhar cada atualização e a comunidade já pode apoiar o seu pedido.
           </p>
@@ -203,7 +205,7 @@ export default function NewDemandPage() {
                 <h2 className="text-ink-900 text-xl leading-tight font-extrabold">
                   Conte o que está acontecendo
                 </h2>
-                <p className="text-ink-500 text-[13px]">{category?.name}</p>
+                <p className="text-ink-500 text-[0.8125rem]">{category?.name}</p>
               </div>
             </div>
             <Field
@@ -234,12 +236,24 @@ export default function NewDemandPage() {
                 placeholder="Descreva o que você observou…"
               />
             </Field>
+            <DictationButton
+              field="a descrição"
+              className="-mt-2 self-end"
+              onText={(spoken) =>
+                setDescription((current) =>
+                  `${current} ${spoken}`.trim().slice(0, limits.demandDescriptionMaxLength),
+                )
+              }
+              onError={(message) => notify.warning(message)}
+            />
             <div>
-              <p className="text-ink-800 mb-2 text-[13px] font-bold">Fotos (opcional)</p>
+              <p className="text-ink-800 mb-2 text-[0.8125rem] font-bold">Fotos (opcional)</p>
               <ImagePicker value={photos} onChange={setPhotos} max={limits.demandMaxPhotos} />
             </div>
             <div>
-              <p className="text-ink-800 mb-2 text-[13px] font-bold">Grau de urgência sugerido</p>
+              <p className="text-ink-800 mb-2 text-[0.8125rem] font-bold">
+                Grau de urgência sugerido
+              </p>
               <SegmentedControl
                 ariaLabel="Grau de urgência"
                 options={URGENCY_OPTIONS}
@@ -308,7 +322,7 @@ export default function NewDemandPage() {
             ) : (
               <Button
                 variant="secondary"
-                leftIcon={<Sparkles className="text-sun-600 size-[18px]" />}
+                leftIcon={<Sparkles className="text-sun-600 size-[1.125rem]" />}
                 disabled={description.trim().length < 10}
                 onClick={analyze}
               >

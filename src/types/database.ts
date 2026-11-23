@@ -1,3 +1,4 @@
+import type { AccessPoint, TransitLine, TransitStop } from './accessibility'
 import type { AIConversation } from './ai'
 import type { ISODate, Neighborhood } from './common'
 import type { Business, Favorite, Product, Review, Sale, Transaction } from './commerce'
@@ -8,8 +9,12 @@ import type { CommunityEvent } from './events'
 import type { Initiative, Institution, PublicService } from './institutions'
 import type { Credential, User, UserSettings } from './user'
 
-/** Versão do esquema local. Ao mudar o formato dos dados, incremente para forçar nova carga demonstrativa. */
-export const DATABASE_SCHEMA_VERSION = 1
+/**
+ * Versão do esquema local. Ao mudar o formato dos dados, incremente e descreva em
+ * `repositories/local/upgrade.ts` como levar uma base antiga para a versão nova
+ * (assim o que a pessoa criou no aparelho é preservado).
+ */
+export const DATABASE_SCHEMA_VERSION = 2
 
 /** Solicitação de redefinição de senha (simulada no modo demonstração). */
 export interface PasswordResetToken {
@@ -62,6 +67,9 @@ export interface Database {
   notifications: AppNotification[]
   news: NewsArticle[]
   aiConversations: AIConversation[]
+  transitLines: TransitLine[]
+  transitStops: TransitStop[]
+  accessPoints: AccessPoint[]
 }
 
 /** Nome de uma coleção ("tabela") do banco local. */
@@ -91,4 +99,7 @@ export const COLLECTION_NAMES: CollectionName[] = [
   'notifications',
   'news',
   'aiConversations',
+  'transitLines',
+  'transitStops',
+  'accessPoints',
 ]

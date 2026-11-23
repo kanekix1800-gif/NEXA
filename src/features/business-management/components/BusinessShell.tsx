@@ -61,7 +61,7 @@ export function BusinessShell({ children, actions }: BusinessShellProps) {
               end={tab.end}
               className={({ isActive }) =>
                 cn(
-                  'inline-flex h-[38px] shrink-0 items-center gap-1.5 rounded-full border px-4 text-[13px] font-semibold whitespace-nowrap transition-colors',
+                  'inline-flex h-[2.375rem] shrink-0 items-center gap-1.5 rounded-full border px-4 text-[0.8125rem] font-semibold whitespace-nowrap transition-colors',
                   isActive
                     ? 'border-nexa-900 bg-nexa-900 text-white'
                     : 'border-line bg-surface text-ink-700 hover:bg-cream-50',

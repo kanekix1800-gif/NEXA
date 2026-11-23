@@ -67,6 +67,20 @@ export const FIXTURE = {
     inactive: 'prd_inativo',
   },
   news: 'nws_onibus',
+  mobility: {
+    /** Parada no Centro, com piso tátil. */
+    stopCentro: 'stp_centro',
+    /** Parada na Vila, sem recursos. */
+    stopVila: 'stp_vila',
+    /** Linha com toda a frota acessível (06:00–22:00, a cada 30 min). */
+    accessibleLine: 'lin_10',
+    /** Linha sem ônibus acessíveis. */
+    inaccessibleLine: 'lin_20',
+    /** Escadaria no Centro (barreira), a ~200 m do centro do mapa. */
+    stairs: 'acp_escada',
+    /** Rampa na Vila (apoio). */
+    ramp: 'acp_rampa',
+  },
 } as const
 
 const AVATAR: AvatarSpec = {
@@ -394,5 +408,77 @@ export function buildFixtureDatabase(now: Date = FIXTURE_NOW): Database {
       },
     ],
     aiConversations: [],
+    transitStops: [
+      {
+        id: FIXTURE.mobility.stopCentro,
+        name: 'Terminal Central',
+        addressHint: 'Avenida Principal, 100',
+        neighborhoodId: FIXTURE.neighborhoods.centro,
+        location: offsetPoint(FIXTURE_CENTER, 80, -100),
+        features: ['shelter', 'tactile_paving'],
+      },
+      {
+        id: FIXTURE.mobility.stopVila,
+        name: 'Rua das Acácias',
+        addressHint: 'Rua das Acácias, 100',
+        neighborhoodId: FIXTURE.neighborhoods.vila,
+        location: offsetPoint(FIXTURE_CENTER, 950, -650),
+        features: [],
+      },
+    ],
+    transitLines: [
+      {
+        id: FIXTURE.mobility.accessibleLine,
+        code: '10',
+        name: 'Vila Esperança ⇄ Centro',
+        stopIds: [FIXTURE.mobility.stopVila, FIXTURE.mobility.stopCentro],
+        fleet: 'all',
+        features: ['lift', 'audio_announcements'],
+        frequencyMinutes: 30,
+        firstDeparture: '06:00',
+        lastDeparture: '22:00',
+        isDemo: true,
+      },
+      {
+        id: FIXTURE.mobility.inaccessibleLine,
+        code: '20',
+        name: 'Circular da Vila',
+        stopIds: [FIXTURE.mobility.stopVila],
+        fleet: 'none',
+        features: ['priority_seats'],
+        frequencyMinutes: 60,
+        firstDeparture: '07:00',
+        lastDeparture: '19:00',
+        note: 'Sem elevador.',
+        isDemo: true,
+      },
+    ],
+    accessPoints: [
+      {
+        id: FIXTURE.mobility.stairs,
+        kind: 'stairs',
+        title: 'Escadaria da praça',
+        description: 'Escadaria com 20 degraus.',
+        addressHint: 'Praça da Matriz',
+        neighborhoodId: FIXTURE.neighborhoods.centro,
+        location: offsetPoint(FIXTURE_CENTER, 200, 0),
+        alternative: 'Use a rampa da rua lateral.',
+        audiences: ['blind', 'wheelchair'],
+        checkedAt: createdAt,
+        isDemo: true,
+      },
+      {
+        id: FIXTURE.mobility.ramp,
+        kind: 'ramp',
+        title: 'Rampa da escola',
+        description: 'Rampa com corrimão.',
+        addressHint: 'Rua dos Estudantes, 45',
+        neighborhoodId: FIXTURE.neighborhoods.vila,
+        location: offsetPoint(FIXTURE_CENTER, 900, -700),
+        audiences: ['wheelchair'],
+        checkedAt: createdAt,
+        isDemo: true,
+      },
+    ],
   }
 }

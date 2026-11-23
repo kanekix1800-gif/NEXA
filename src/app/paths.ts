@@ -1,5 +1,8 @@
 import type { ID, MapLayer, PostCategory, UserRole } from '@/types'
 
+/** Abas da tela de mobilidade acessível. */
+export type MobilityTab = 'onibus' | 'caminho' | 'alertas'
+
 /**
  * MAPA DE ROTAS DO NEXA
  * ─────────────────────────────────────────────────────────────────────────────
@@ -18,6 +21,8 @@ export const paths = {
   /** Termos de uso e aviso de privacidade (acessíveis com ou sem sessão). */
   terms: '/termos',
   privacy: '/privacidade',
+  /** Opções de acessibilidade do aparelho (acessível com ou sem sessão). */
+  accessibility: '/acessibilidade',
 
   // ── Início e notícias ──
   home: '/inicio',
@@ -43,6 +48,13 @@ export const paths = {
   mapFocus: (layer: MapLayer, refId: ID) => `/mapa?foco=${layer}:${refId}`,
   /** Abre o mapa com apenas uma camada ativa. */
   mapLayer: (layer: MapLayer) => `/mapa?camada=${layer}`,
+
+  // ── Mobilidade acessível (ônibus, barreiras e apoios no caminho) ──
+  mobility: '/mobilidade',
+  mobilityTab: (tab: MobilityTab) => `/mobilidade?aba=${tab}`,
+  mobilityLine: (id: ID) => `/mobilidade?aba=onibus&linha=${id}`,
+  mobilityStop: (id: ID) => `/mobilidade?aba=onibus&parada=${id}`,
+  mobilityPoint: (id: ID) => `/mobilidade?aba=caminho&ponto=${id}`,
 
   // ── Comércio local ──
   businesses: '/comercio',

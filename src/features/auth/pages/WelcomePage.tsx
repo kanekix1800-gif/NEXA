@@ -1,3 +1,4 @@
+import { Accessibility } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Link } from 'react-router'
 
@@ -21,9 +22,18 @@ export default function WelcomePage() {
     <div className="relative min-h-dvh overflow-hidden">
       <BrandBackdrop />
       <main className="pt-safe relative mx-auto flex min-h-dvh w-full max-w-md flex-col">
+        <div className="flex justify-end px-4 pt-3">
+          <Link
+            to={paths.accessibility}
+            className="text-nexa-900 bg-surface/80 inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-[0.8125rem] font-bold"
+          >
+            <Accessibility className="size-5" aria-hidden />
+            Acessibilidade
+          </Link>
+        </div>
         <motion.div
           {...rise(0)}
-          className="flex flex-1 flex-col items-center justify-center px-6 pt-10"
+          className="flex flex-1 flex-col items-center justify-center px-6 pt-4"
         >
           <Logo size="xl" layout="stacked" withTagline />
         </motion.div>
@@ -47,7 +57,7 @@ export default function WelcomePage() {
           </ButtonLink>
           <Link
             to={paths.login}
-            className="text-nexa-900 flex h-12 w-full items-center justify-center rounded-full text-[15px] font-bold"
+            className="text-nexa-900 flex h-12 w-full items-center justify-center rounded-full text-[0.9375rem] font-bold"
           >
             Entrar
           </Link>

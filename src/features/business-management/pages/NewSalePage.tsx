@@ -98,7 +98,7 @@ function SaleForm({
             <CircleCheck className="size-10" aria-hidden />
           </span>
           <h2 className="text-ink-900 text-2xl font-extrabold">Venda registrada!</h2>
-          <p className="text-ink-600 text-[15px]">
+          <p className="text-ink-600 text-[0.9375rem]">
             {formatCurrency(done.totalCents)} em {PAYMENT_METHOD_LABEL[done.paymentMethod]} ·{' '}
             {pluralize(done.items.length, 'item', 'itens')}. O estoque e o financeiro já foram
             atualizados.
@@ -211,7 +211,7 @@ function SaleForm({
           {lines.length > 0 && (
             <>
               <div>
-                <p className="text-ink-800 mb-2 text-[13px] font-bold">Forma de pagamento</p>
+                <p className="text-ink-800 mb-2 text-[0.8125rem] font-bold">Forma de pagamento</p>
                 <FilterChips
                   ariaLabel="Forma de pagamento"
                   options={PAYMENTS}

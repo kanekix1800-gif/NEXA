@@ -74,7 +74,7 @@ export function FilterChips<T extends string>({
             tabIndex={active ? 0 : -1}
             onClick={() => onChange(option.value)}
             className={cn(
-              'inline-flex h-[38px] shrink-0 items-center gap-1.5 rounded-full border px-4 text-[13px] font-semibold whitespace-nowrap transition-colors duration-150',
+              'inline-flex h-[2.375rem] shrink-0 items-center gap-1.5 rounded-full border px-4 text-[0.8125rem] font-semibold whitespace-nowrap transition-colors duration-150',
               active
                 ? 'border-nexa-900 bg-nexa-900 text-white'
                 : 'border-line bg-surface text-ink-700 hover:bg-cream-50',
@@ -108,7 +108,7 @@ export function SegmentedControl<T extends string>({
       tabIndex={-1}
       aria-label={ariaLabel}
       onKeyDown={(event) => handleArrows(event, options, value, onChange)}
-      className={cn('bg-nexa-50 inline-flex rounded-full p-1', className)}
+      className={cn('bg-nexa-50 inline-flex max-w-full rounded-full p-1', className)}
     >
       {options.map((option) => {
         const active = option.value === value
@@ -121,7 +121,7 @@ export function SegmentedControl<T extends string>({
             tabIndex={active ? 0 : -1}
             onClick={() => onChange(option.value)}
             className={cn(
-              'inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-full px-5 text-[13px] font-bold whitespace-nowrap transition-colors duration-200',
+              'inline-flex min-h-9 flex-auto items-center justify-center gap-1.5 rounded-full px-3 py-1 text-center sm:px-5 text-[0.8125rem] leading-tight font-bold transition-colors duration-200',
               active ? 'bg-nexa-900 text-white shadow-sm' : 'text-ink-600 hover:text-ink-900',
             )}
           >

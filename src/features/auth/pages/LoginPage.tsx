@@ -124,7 +124,7 @@ export default function LoginPage() {
           />
         </Field>
         <div className="-mt-1 flex justify-end">
-          <Link to={paths.recoverPassword} className="text-nexa-800 text-[13px] font-bold">
+          <Link to={paths.recoverPassword} className="text-nexa-800 text-[0.8125rem] font-bold">
             Esqueci minha senha
           </Link>
         </div>

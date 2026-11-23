@@ -11,6 +11,7 @@ import {
   type PersonKey,
 } from '../cast'
 import type { SeedContext } from '../context'
+import { EVENT_ACCESSIBILITY } from '../core/mobility'
 import { around, near, pickPeople, uid } from './shared'
 
 /** Ids fixos dos eventos (usados por posts, notícias e notificações). */
@@ -244,6 +245,7 @@ export function buildEvents(ctx: SeedContext): CommunityEvent[] {
       organizer: row.organizer,
       attendeeIds: [...new Set(attendeeIds)],
       ...(row.capacity !== undefined ? { capacity: row.capacity } : {}),
+      accessibility: [...(EVENT_ACCESSIBILITY[row.id] ?? [])],
       status: 'scheduled' as const,
       createdBy: uid(row.createdBy),
       createdAt: ctx.at(-row.createdDaysAgo, 11, 0),

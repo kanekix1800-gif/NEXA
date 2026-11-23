@@ -3,7 +3,9 @@ import { config } from '@/config'
 import { repos } from '@/repositories'
 import { computeBusinessSummary } from '@/services/business/metrics'
 import {
+  ACCESS_POINT_KIND_LABEL,
   DEMAND_STATUS_LABEL,
+  FLEET_ACCESSIBILITY_LABEL,
   OPEN_DEMAND_STATUSES,
   PUBLIC_SERVICE_KIND_LABEL,
   type AIAction,
@@ -69,6 +71,12 @@ export const QUICK_PROMPTS: AIQuickPrompt[] = [
     icon: 'calendar',
   },
   {
+    id: 'accessibility',
+    label: 'Ônibus acessíveis e barreiras',
+    prompt: 'Quais ônibus acessíveis passam perto de mim?',
+    icon: 'accessibility',
+  },
+  {
     id: 'business',
     label: 'Ajudar meu negócio',
     prompt: 'Como está o meu negócio?',
@@ -96,6 +104,8 @@ type Intent =
   | 'events'
   | 'problems'
   | 'business'
+  | 'transit'
+  | 'barriers'
   | 'app'
   | 'unknown'
 
@@ -201,6 +211,41 @@ const INTENT_KEYWORDS: Array<[Intent, string[]]> = [
       'feira',
       'mutirao',
       'oficina',
+    ],
+  ],
+  [
+    'transit',
+    [
+      'onibus',
+      'linha de onibus',
+      'transporte',
+      'onibus acessivel',
+      'onibus acessiveis',
+      'cadeira de rodas',
+      'cadeirante',
+      'piso baixo',
+      'parada de onibus',
+      'ponto de onibus',
+    ],
+  ],
+  [
+    'barriers',
+    [
+      'escada',
+      'escadaria',
+      'degrau',
+      'barreira',
+      'rampa',
+      'piso tatil',
+      'semaforo sonoro',
+      'calcada',
+      'acessibilidade',
+      'deficiencia',
+      'pessoa cega',
+      'sou cego',
+      'sou cega',
+      'baixa visao',
+      'caminho acessivel',
     ],
   ],
   [
@@ -422,8 +467,67 @@ function replyApp(): Reply {
   }
 }
 
+async function replyTransit(): Promise<Reply> {
+  const lines = (await repos.mobility.listLines({ accessibleOnly: true })).slice(0, 5)
+  if (lines.length === 0) {
+    return {
+      content: 'Não encontrei linhas de ônibus acessíveis cadastradas.',
+      actions: [{ label: 'Ver todas as linhas', to: paths.mobilityTab('onibus'), icon: 'bus' }],
+    }
+  }
+  return {
+    content:
+      'Estas linhas têm ônibus acessíveis. Toque em uma delas para ver os recursos, as paradas e as próximas partidas (dados demonstrativos):',
+    references: lines.map((line) => ({
+      kind: 'transit',
+      id: line.id,
+      title: `Linha ${line.code} · ${line.name}`,
+      subtitle: `${FLEET_ACCESSIBILITY_LABEL[line.fleet]} · ${
+        line.nextDepartures[0] ? `próxima às ${line.nextDepartures[0]}` : 'sem mais partidas hoje'
+      }`,
+      to: paths.mobilityLine(line.id),
+    })),
+    actions: [
+      { label: 'Ver todas as linhas', to: paths.mobilityTab('onibus'), icon: 'bus' },
+      { label: 'Paradas no mapa', to: paths.mapLayer('transit'), icon: 'map-pin' },
+    ],
+  }
+}
+
+async function replyBarriers(): Promise<Reply> {
+  const barriers = (await repos.mobility.listAccessPoints({ nature: 'barrier' })).slice(0, 4)
+  if (barriers.length === 0) {
+    return {
+      content: 'Não há barreiras cadastradas perto de você.',
+      actions: [
+        { label: 'Abrir a mobilidade', to: paths.mobilityTab('caminho'), icon: 'accessibility' },
+      ],
+    }
+  }
+  return {
+    content:
+      'Estas são as barreiras cadastradas mais perto de você, com o caminho alternativo de cada uma. Na aba Alertas, o NEXA avisa por voz e vibração quando você se aproxima (dados demonstrativos):',
+    references: barriers.map((point) => ({
+      kind: 'access',
+      id: point.id,
+      title: point.title,
+      subtitle: `${ACCESS_POINT_KIND_LABEL[point.kind]} · ${formatDistance(point.distanceMeters)}`,
+      to: paths.mobilityPoint(point.id),
+    })),
+    actions: [
+      { label: 'Barreiras e apoios', to: paths.mobilityTab('caminho'), icon: 'accessibility' },
+      { label: 'Ouvir os alertas', to: paths.mobilityTab('alertas'), icon: 'audio' },
+      { label: 'Opções de acessibilidade', to: paths.accessibility, icon: 'settings' },
+    ],
+  }
+}
+
 async function demoReply(question: string, user: User): Promise<Reply> {
   switch (detectIntent(question)) {
+    case 'transit':
+      return replyTransit()
+    case 'barriers':
+      return replyBarriers()
     case 'services':
       return replyServices()
     case 'commerce':

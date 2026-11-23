@@ -18,7 +18,7 @@ export default function HelpPage() {
             </span>
             <div className="min-w-0 flex-1">
               <p className="text-base font-extrabold">Pergunte à NEXA IA</p>
-              <p className="text-[13px] text-white/75">
+              <p className="text-[0.8125rem] text-white/75">
                 Ela explica como usar cada recurso do app.
               </p>
             </div>
@@ -31,7 +31,7 @@ export default function HelpPage() {
             <SectionHeader title="Perguntas frequentes" />
             {HELP_TOPICS.map((topic) => (
               <details key={topic.id} className="bg-surface rounded-card shadow-card group">
-                <summary className="text-ink-900 flex cursor-pointer list-none items-center justify-between gap-3 p-4 text-[15px] font-bold [&::-webkit-details-marker]:hidden">
+                <summary className="text-ink-900 flex cursor-pointer list-none items-center justify-between gap-3 p-4 text-[0.9375rem] font-bold [&::-webkit-details-marker]:hidden">
                   {topic.question}
                   <ChevronDown
                     className="text-ink-400 size-5 shrink-0 transition-transform group-open:rotate-180"
@@ -48,7 +48,7 @@ export default function HelpPage() {
           </section>
 
           <section className="bg-surface rounded-card shadow-card flex flex-col items-start gap-1 p-4">
-            <h2 className="text-ink-900 text-[15px] font-bold">Mostrar o NEXA para alguém</h2>
+            <h2 className="text-ink-900 text-[0.9375rem] font-bold">Mostrar o NEXA para alguém</h2>
             <p className="text-ink-600 text-sm">
               Gere um QR Code para abrir o aplicativo em outro celular.
             </p>

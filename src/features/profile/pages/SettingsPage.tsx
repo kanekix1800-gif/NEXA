@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
-import { Download, RotateCcw, Trash2 } from 'lucide-react'
+import { Accessibility, Download, RotateCcw, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 
 import { paths } from '@/app/paths'
 import {
   Button,
+  ButtonLink,
   Callout,
   Card,
   ConfirmDialog,
@@ -16,7 +17,6 @@ import {
   PageHeader,
   PasswordInput,
   SectionHeader,
-  Select,
   SkeletonList,
   SwitchRow,
 } from '@/components/ui'
@@ -135,22 +135,19 @@ export default function SettingsPage() {
 
             <section className="flex flex-col gap-2">
               <SectionHeader title="Acessibilidade" />
-              <Card>
-                <Field
-                  label="Animações"
-                  hint="“Reduzido” desativa transições e movimentos da interface."
+              <Card className="flex flex-col items-start gap-3">
+                <p className="text-ink-600 text-[0.8125rem] leading-snug">
+                  Tamanho do texto, alto contraste, fontes de leitura, voz, sons, vibração,
+                  animações e ditado. Valem para este aparelho, com ou sem conta.
+                </p>
+                <ButtonLink
+                  to={paths.accessibility}
+                  variant="secondary"
+                  size="sm"
+                  leftIcon={<Accessibility className="size-4" />}
                 >
-                  <Select
-                    value={current.motion}
-                    onChange={(e) =>
-                      void update.run({ motion: e.target.value as UserSettings['motion'] })
-                    }
-                  >
-                    <option value="system">Seguir o aparelho</option>
-                    <option value="reduced">Movimento reduzido</option>
-                    <option value="full">Movimento completo</option>
-                  </Select>
-                </Field>
+                  Abrir as opções de acessibilidade
+                </ButtonLink>
               </Card>
             </section>
 
@@ -171,7 +168,7 @@ export default function SettingsPage() {
             <section className="flex flex-col gap-2">
               <SectionHeader title="Privacidade e dados" />
               <Card className="flex flex-col gap-3">
-                <p className="text-ink-600 text-[13px] leading-snug">
+                <p className="text-ink-600 text-[0.8125rem] leading-snug">
                   Você controla os seus dados (LGPD): pode baixar uma cópia ou excluir a conta a
                   qualquer momento. Veja o{' '}
                   <Link

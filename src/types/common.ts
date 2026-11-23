@@ -28,6 +28,8 @@ export interface Neighborhood {
   id: ID
   name: string
   center: GeoPoint
+  /** Região da cidade (ex.: "Zona Norte"), usada para agrupar e buscar bairros. */
+  zone?: string
 }
 
 /**
@@ -42,6 +44,15 @@ export type IconKey =
   | 'lightbulb'
   | 'bus'
   | 'accessibility'
+  // acessibilidade e mobilidade
+  | 'stairs'
+  | 'slope'
+  | 'ramp'
+  | 'elevator'
+  | 'audio'
+  | 'footprints'
+  | 'restroom'
+  | 'parking'
   | 'droplets'
   | 'alert'
   | 'more'

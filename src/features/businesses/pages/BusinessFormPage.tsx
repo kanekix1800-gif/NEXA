@@ -21,11 +21,19 @@ import {
   SwitchRow,
   Textarea,
 } from '@/components/ui'
+import { NeighborhoodPicker } from '@/components/domain/NeighborhoodPicker'
+import { AccessibilityFeaturesField } from '@/components/domain/PlaceAccessibility'
 import { config } from '@/config'
 import { useAuth, useCurrentUser } from '@/contexts/AuthContext'
 import { useAction } from '@/hooks/useAction'
 import { repos, type BusinessInput } from '@/repositories'
-import { WEEKDAY_LABEL, type BusinessView, type GeoPoint, type WeekSchedule } from '@/types'
+import {
+  WEEKDAY_LABEL,
+  type AccessibilityFeature,
+  type BusinessView,
+  type GeoPoint,
+  type WeekSchedule,
+} from '@/types'
 import { isAppError } from '@/utils/errors'
 import { defaultSchedule } from '@/utils/schedule'
 
@@ -73,10 +81,6 @@ function BusinessForm({ business }: { business: BusinessView | null }) {
     queryKey: ['reference', 'categories', 'business'],
     queryFn: () => repos.reference.listCategories('business'),
   })
-  const neighborhoods = useQuery({
-    queryKey: ['reference', 'neighborhoods'],
-    queryFn: () => repos.reference.listNeighborhoods(),
-  })
 
   const [name, setName] = useState(business?.name ?? '')
   const [categoryId, setCategoryId] = useState(business?.categoryId ?? '')
@@ -91,6 +95,9 @@ function BusinessForm({ business }: { business: BusinessView | null }) {
   const [whatsapp, setWhatsapp] = useState(business?.whatsapp ?? '')
   const [instagram, setInstagram] = useState(business?.instagram ?? '')
   const [tags, setTags] = useState((business?.tags ?? []).join(', '))
+  const [accessibility, setAccessibility] = useState<AccessibilityFeature[]>(
+    business?.accessibility ?? [],
+  )
   const [schedule, setSchedule] = useState<WeekSchedule>(business?.schedule ?? defaultSchedule())
   const [allowNegativeStock, setAllowNegativeStock] = useState(
     business?.settings?.allowNegativeStock ?? false,
@@ -115,6 +122,7 @@ function BusinessForm({ business }: { business: BusinessView | null }) {
           .split(',')
           .map((tag) => tag.trim())
           .filter(Boolean),
+        accessibility,
         settings: { allowNegativeStock },
       }
       return business ? repos.businesses.update(business.id, input) : repos.businesses.create(input)
@@ -176,7 +184,9 @@ function BusinessForm({ business }: { business: BusinessView | null }) {
             />
           </Field>
           <div>
-            <p className="text-ink-800 mb-2 text-[13px] font-bold">Imagem de capa (opcional)</p>
+            <p className="text-ink-800 mb-2 text-[0.8125rem] font-bold">
+              Imagem de capa (opcional)
+            </p>
             <ImagePicker value={cover} onChange={setCover} max={1} label="Adicionar capa" />
           </div>
 
@@ -189,19 +199,10 @@ function BusinessForm({ business }: { business: BusinessView | null }) {
             />
           </Field>
           <Field label="Bairro" error={errors.neighborhoodId} required>
-            <Select
-              value={neighborhoodId}
-              onChange={(event) => setNeighborhoodId(event.target.value)}
-            >
-              {(neighborhoods.data ?? []).map((neighborhood) => (
-                <option key={neighborhood.id} value={neighborhood.id}>
-                  {neighborhood.name}
-                </option>
-              ))}
-            </Select>
+            <NeighborhoodPicker value={neighborhoodId} onChange={setNeighborhoodId} />
           </Field>
           <div>
-            <p className="text-ink-800 mb-2 text-[13px] font-bold">
+            <p className="text-ink-800 mb-2 text-[0.8125rem] font-bold">
               Localização no mapa <span className="text-danger-500">*</span>
             </p>
             <LocationPicker value={location} onChange={setLocation} color="orange" icon="store" />
@@ -210,7 +211,7 @@ function BusinessForm({ business }: { business: BusinessView | null }) {
             )}
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Field label="Telefone" error={errors.phone} hint="Com DDD." required>
               <Input
                 type="tel"
@@ -244,8 +245,15 @@ function BusinessForm({ business }: { business: BusinessView | null }) {
             <Input value={tags} onChange={(event) => setTags(event.target.value)} />
           </Field>
 
+          <AccessibilityFeaturesField
+            value={accessibility}
+            onChange={setAccessibility}
+            legend="Marque o que o seu estabelecimento oferece. Isso ajuda pessoas com deficiência a escolher onde ir."
+            error={errors.accessibility}
+          />
+
           <fieldset className="bg-surface rounded-card shadow-card p-4">
-            <legend className="text-ink-800 float-left mb-2 text-[13px] font-bold">
+            <legend className="text-ink-800 float-left mb-2 text-[0.8125rem] font-bold">
               Horário de funcionamento
             </legend>
             <div className="divide-line clear-both divide-y">
@@ -260,13 +268,13 @@ function BusinessForm({ business }: { business: BusinessView | null }) {
                     label={`Abre ${WEEKDAY_LABEL[day]}`}
                   />
                   {hours ? (
-                    <span className="ml-auto flex items-center gap-1.5">
+                    <span className="ml-auto flex max-w-full flex-wrap items-center justify-end gap-1.5">
                       <input
                         type="time"
                         aria-label={`Abertura — ${WEEKDAY_LABEL[day]}`}
                         value={hours.open}
                         onChange={(event) => setDay(day, { open: event.target.value })}
-                        className="border-line bg-surface h-10 rounded-xl border px-2 text-sm"
+                        className="border-line bg-surface h-10 min-w-0 rounded-xl border px-2 text-sm"
                       />
                       <span className="text-ink-400 text-sm">às</span>
                       <input
@@ -274,7 +282,7 @@ function BusinessForm({ business }: { business: BusinessView | null }) {
                         aria-label={`Fechamento — ${WEEKDAY_LABEL[day]}`}
                         value={hours.close}
                         onChange={(event) => setDay(day, { close: event.target.value })}
-                        className="border-line bg-surface h-10 rounded-xl border px-2 text-sm"
+                        className="border-line bg-surface h-10 min-w-0 rounded-xl border px-2 text-sm"
                       />
                     </span>
                   ) : (

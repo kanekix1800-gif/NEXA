@@ -103,10 +103,10 @@ export default function InstitutionsPage() {
                     >
                       <IconTile icon={service.icon} color={service.color} size="lg" />
                       <span className="min-w-0 flex-1">
-                        <span className="text-ink-900 block truncate text-[15px] font-bold">
+                        <span className="text-ink-900 block truncate text-[0.9375rem] font-bold">
                           {service.name}
                         </span>
-                        <span className="text-ink-500 block truncate text-[13px]">
+                        <span className="text-ink-500 block truncate text-[0.8125rem]">
                           {PUBLIC_SERVICE_KIND_LABEL[service.kind]} · {service.neighborhoodName}
                           {service.distanceMeters !== null &&
                             ` · ${formatDistance(service.distanceMeters)}`}

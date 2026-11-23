@@ -102,6 +102,15 @@ export const PRIVACY_SECTIONS: LegalSection[] = [
     ],
   },
   {
+    id: 'acessibilidade',
+    title: 'Acessibilidade, voz e microfone',
+    paragraphs: [
+      'As opções de acessibilidade (tamanho do texto, contraste, voz, sons, vibração e o que destacar para você) ficam guardadas somente neste aparelho e não fazem parte dos dados da sua conta. Não registramos nenhuma informação sobre deficiência.',
+      'A leitura em voz alta é feita pela voz do próprio aparelho. O ditado por voz, quando ligado por você, usa o reconhecimento de fala do navegador, que pode enviar o áudio ao serviço do fabricante para convertê-lo em texto; o NEXA não grava nem guarda esse áudio.',
+      'Nos alertas de barreiras, a sua posição é usada apenas enquanto a tela está aberta, para medir a distância até os pontos cadastrados. Ela não é guardada nem enviada.',
+    ],
+  },
+  {
     id: 'seus-direitos',
     title: 'Exportar e excluir seus dados',
     paragraphs: [

@@ -136,7 +136,7 @@ export default function NotificationsPage() {
                         >
                           {notification.title}
                         </span>
-                        <span className="text-ink-600 mt-0.5 line-clamp-2 block text-[13px] leading-snug">
+                        <span className="text-ink-600 mt-0.5 line-clamp-2 block text-[0.8125rem] leading-snug">
                           {notification.body}
                         </span>
                         <span className="text-ink-400 mt-1 block text-xs">

@@ -43,6 +43,7 @@ import {
   Skeleton,
   Textarea,
 } from '@/components/ui'
+import { PlaceAccessibility } from '@/components/domain/PlaceAccessibility'
 import { config } from '@/config'
 import { useAction } from '@/hooks/useAction'
 import { repos } from '@/repositories'
@@ -84,7 +85,7 @@ function Catalog({ items }: { items: CatalogItem[] }) {
                 {!item.available && <Badge color="neutral">Indisponível</Badge>}
                 <p className="text-ink-900 text-sm font-extrabold whitespace-nowrap tabular-nums">
                   {formatCurrency(item.priceCents)}
-                  <span className="text-ink-400 text-[11px] font-medium">
+                  <span className="text-ink-400 text-[0.6875rem] font-medium">
                     {' '}
                     /{PRODUCT_UNIT_LABEL[item.unit]}
                   </span>
@@ -201,7 +202,7 @@ function BusinessContent({ business }: { business: BusinessView }) {
         </Card>
       )}
 
-      <p className="text-ink-700 text-[15px] leading-relaxed">{business.description}</p>
+      <p className="text-ink-700 text-[0.9375rem] leading-relaxed">{business.description}</p>
 
       {business.tags.length > 0 && (
         <div className="flex flex-wrap gap-2">
@@ -236,6 +237,8 @@ function BusinessContent({ business }: { business: BusinessView }) {
           {(items) => <Catalog items={items} />}
         </AsyncView>
       </section>
+
+      <PlaceAccessibility features={business.accessibility} subject="Este estabelecimento" />
 
       <section className="flex flex-col gap-3">
         <SectionHeader title="Horário de funcionamento" />
@@ -322,7 +325,7 @@ function BusinessContent({ business }: { business: BusinessView }) {
                       size="sm"
                     />
                     <div className="min-w-0 flex-1">
-                      <p className="text-ink-900 truncate text-[13px] font-bold">
+                      <p className="text-ink-900 truncate text-[0.8125rem] font-bold">
                         {review.isMine ? 'Você' : review.author.name}
                       </p>
                       <p className="text-ink-400 text-xs">{timeAgo(review.createdAt)}</p>
@@ -387,7 +390,9 @@ function BusinessContent({ business }: { business: BusinessView }) {
                 </span>
                 <span className="min-w-0 flex-1 text-left">
                   <span className="text-ink-900 block text-sm font-bold">{contact.label}</span>
-                  <span className="text-ink-500 block truncate text-[13px]">{contact.value}</span>
+                  <span className="text-ink-500 block truncate text-[0.8125rem]">
+                    {contact.value}
+                  </span>
                 </span>
               </>
             )

@@ -218,7 +218,7 @@ function Panel({ institution }: { institution: InstitutionView }) {
           }
         >
           {(items) => (
-            <div className="grid gap-3 lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
               {items.map((demand) => (
                 <DemandCard key={demand.id} demand={demand} />
               ))}
@@ -261,12 +261,14 @@ function Panel({ institution }: { institution: InstitutionView }) {
                 <Card key={initiative.id} className="flex items-start gap-3">
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-ink-900 text-[15px] font-bold">{initiative.title}</h3>
+                      <h3 className="text-ink-900 text-[0.9375rem] font-bold">
+                        {initiative.title}
+                      </h3>
                       <Badge color={initiative.status === 'active' ? 'green' : 'neutral'}>
                         {initiative.status === 'active' ? 'Ativa' : 'Encerrada'}
                       </Badge>
                     </div>
-                    <p className="text-ink-600 mt-1 line-clamp-2 text-[13px]">
+                    <p className="text-ink-600 mt-1 line-clamp-2 text-[0.8125rem]">
                       {initiative.description}
                     </p>
                     <p className="text-ink-400 mt-1 text-xs">{timeAgo(initiative.createdAt)}</p>

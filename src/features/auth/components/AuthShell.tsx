@@ -1,4 +1,4 @@
-import { ArrowLeft } from 'lucide-react'
+import { Accessibility, ArrowLeft } from 'lucide-react'
 import { motion } from 'motion/react'
 import type { ReactNode } from 'react'
 import { Link } from 'react-router'
@@ -40,8 +40,15 @@ export function AuthShell({
             <ArrowLeft className="size-5" />
           </Link>
           <Logo size="sm" />
-          <span className="flex min-w-11 justify-end">
+          <span className="flex min-w-11 items-center justify-end gap-1">
             {config.isDemoMode && <DemoBadge label="Demo" />}
+            <Link
+              to={paths.accessibility}
+              aria-label="Acessibilidade"
+              className="text-nexa-900 hover:bg-ink-100 -mr-2.5 flex size-11 items-center justify-center rounded-full"
+            >
+              <Accessibility className="size-5" aria-hidden />
+            </Link>
           </span>
         </header>
 
@@ -52,7 +59,7 @@ export function AuthShell({
           className="mt-4 flex flex-1 flex-col"
         >
           <h1 className="text-ink-900 text-[1.625rem] leading-tight font-extrabold">{title}</h1>
-          {subtitle && <p className="text-ink-500 mt-1.5 text-[15px]">{subtitle}</p>}
+          {subtitle && <p className="text-ink-500 mt-1.5 text-[0.9375rem]">{subtitle}</p>}
           <div className="mt-6 flex flex-col gap-5">{children}</div>
           {footer && <div className="mt-auto pt-8 text-center text-sm">{footer}</div>}
         </motion.main>

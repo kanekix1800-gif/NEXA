@@ -86,6 +86,9 @@ export type CoreSeed = Pick<
   | 'products'
   | 'sales'
   | 'transactions'
+  | 'transitLines'
+  | 'transitStops'
+  | 'accessPoints'
 >
 
 /** Parte "viva" da base: publicações, demandas, eventos, iniciativas, notificações e notícias. */

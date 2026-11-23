@@ -79,7 +79,7 @@ export function Badge({
     <span
       className={cn(
         'inline-flex items-center gap-1 rounded-full font-bold whitespace-nowrap',
-        size === 'sm' ? 'h-6 px-2.5 text-[11px]' : 'h-7 px-3 text-xs',
+        size === 'sm' ? 'h-6 px-2.5 text-[0.6875rem]' : 'h-7 px-3 text-xs',
         variant === 'soft' && style.soft,
         variant === 'solid' && style.solid,
         variant === 'outline' && cn('border-line-strong border bg-transparent', style.text),
@@ -103,7 +103,7 @@ export function DemoBadge({
   return (
     <span
       className={cn(
-        'bg-cream-200 text-ink-700 inline-flex h-6 items-center gap-1 rounded-full px-2.5 text-[11px] font-bold whitespace-nowrap',
+        'bg-cream-200 text-ink-700 inline-flex h-6 items-center gap-1 rounded-full px-2.5 text-[0.6875rem] font-bold whitespace-nowrap',
         className,
       )}
     >
@@ -119,7 +119,7 @@ export function CountBadge({ count, className }: { count: number; className?: st
   return (
     <span
       className={cn(
-        'bg-sun-400 text-ink-900 ring-surface inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full px-1 text-[10px] leading-none font-extrabold ring-2',
+        'bg-sun-400 text-ink-900 ring-surface inline-flex h-[1.125rem] min-w-[1.125rem] items-center justify-center rounded-full px-1 text-[0.625rem] leading-none font-extrabold ring-2',
         className,
       )}
     >

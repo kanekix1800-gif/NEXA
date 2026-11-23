@@ -31,7 +31,7 @@ function BottomNavItem({ item, badge }: { item: NavItem; badge?: number }) {
       to={item.to}
       className={({ isActive }) =>
         cn(
-          'flex h-full flex-1 flex-col items-center justify-center gap-1 text-[11px] font-semibold transition-colors',
+          'flex h-full min-w-0 flex-1 flex-col items-center justify-center gap-1 text-[min(0.6875rem,12px)] font-semibold tracking-tight transition-colors',
           isActive ? 'text-nexa-900' : 'text-ink-400 hover:text-ink-600',
         )
       }
@@ -39,12 +39,12 @@ function BottomNavItem({ item, badge }: { item: NavItem; badge?: number }) {
       {({ isActive }) => (
         <>
           <span className="relative">
-            <Icon className="size-[22px]" strokeWidth={isActive ? 2.4 : 2} aria-hidden />
+            <Icon className="size-[1.375rem]" strokeWidth={isActive ? 2.4 : 2} aria-hidden />
             {badge !== undefined && (
               <CountBadge count={badge} className="absolute -top-1.5 -right-2" />
             )}
           </span>
-          <span>
+          <span className="max-w-full truncate px-0.5">
             {item.label}
             {badge !== undefined && badge > 0 && (
               <span className="sr-only">, {badge} não lidas</span>
@@ -63,11 +63,11 @@ function BottomNav({ onCreate, unread }: { onCreate: () => void; unread: number 
       aria-label="Navegação principal"
       className="bg-surface/95 border-line shadow-nav z-nav fixed inset-x-0 bottom-0 border-t backdrop-blur-md lg:hidden"
     >
-      <div className="mx-auto flex h-[4.75rem] max-w-xl items-stretch px-2 pb-safe">
+      <div className="mx-auto flex h-[4.75rem] max-w-xl items-stretch px-1 pb-safe">
         {BOTTOM_NAV.left.map((item) => (
           <BottomNavItem key={item.to} item={item} />
         ))}
-        <div className="flex w-20 shrink-0 items-start justify-center">
+        <div className="flex w-16 shrink-0 items-start justify-center">
           <button
             type="button"
             onClick={onCreate}
@@ -110,7 +110,7 @@ function Sidebar({ onCreate, unread }: { onCreate: () => void; unread: number })
         {sidebarSections(user).map((section, index) => (
           <div key={section.title ?? index} className="mt-3 first:mt-0">
             {section.title && (
-              <p className="text-ink-400 px-3 pt-2 pb-1 text-[11px] font-bold tracking-wider uppercase">
+              <p className="text-ink-400 px-3 pt-2 pb-1 text-[0.6875rem] font-bold tracking-wider uppercase">
                 {section.title}
               </p>
             )}
@@ -184,8 +184,10 @@ function QuickActionsSheet({
             >
               <IconTile icon={action.icon} size="lg" />
               <span className="min-w-0">
-                <span className="text-ink-900 block text-[15px] font-bold">{action.title}</span>
-                <span className="text-ink-500 block text-[13px] leading-snug">
+                <span className="text-ink-900 block text-[0.9375rem] font-bold">
+                  {action.title}
+                </span>
+                <span className="text-ink-500 block text-[0.8125rem] leading-snug">
                   {action.description}
                 </span>
               </span>

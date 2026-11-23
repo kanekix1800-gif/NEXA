@@ -129,7 +129,7 @@ function Dashboard({ business }: { business: BusinessView }) {
             to={paths.businessInsights}
             actionLabel="Ver todas"
           />
-          <div className="grid gap-3 lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
             {insights.map((insight) => (
               <Callout
                 key={insight.id}
@@ -152,7 +152,7 @@ function Dashboard({ business }: { business: BusinessView }) {
         </section>
       )}
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <ChartCard
           title="Evolução das vendas"
           subtitle="Faturamento por dia"
