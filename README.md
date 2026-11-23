@@ -291,7 +291,7 @@ npm run test:e2e            # ponta a ponta
 - **Recuperação de senha simulada** e notificações apenas dentro do aplicativo (sem push, e-mail ou SMS).
 - **Mapa depende de internet.** Os blocos do mapa vêm dos servidores públicos do OpenStreetMap, adequados para demonstração, mas não para uso intenso. Não há busca de endereços: o local é marcado no mapa.
 - **Armazenamento local.** Fotos ficam no aparelho e estão sujeitas ao limite de espaço do navegador.
-- **Voz, vibração e ditado dependem do aparelho.** As vozes são as instaladas no sistema, a vibração não existe no iPhone e o ditado usa o reconhecimento de fala do navegador, que pode enviar o áudio ao fabricante. Quem usa leitor de tela deve manter a voz do NEXA desligada.
+- **Voz, vibração e ditado dependem do aparelho.** As vozes são as instaladas no sistema, no iPhone a voz só pode começar depois do primeiro toque na tela (regra do Safari), a vibração não existe no iPhone e o ditado usa o reconhecimento de fala do navegador, que pode enviar o áudio ao fabricante. Quem usa leitor de tela deve manter a voz do NEXA desligada.
 - **Mobilidade demonstrativa.** Linhas, horários, paradas, barreiras e apoios são fictícios, e os recursos de acessibilidade dos locais são declarados, sem vistoria. Os alertas de proximidade só funcionam com a tela aberta e não substituem bengala, cão-guia ou atenção ao caminho.
 - **Sem Libras no conteúdo.** O aplicativo indica onde há atendimento em Libras, mas não traduz os próprios textos.
 - **Compatibilidade.** Testado de forma automatizada em Chromium e WebKit. Não houve bateria de testes em aparelhos físicos.

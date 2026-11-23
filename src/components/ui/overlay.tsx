@@ -1,6 +1,6 @@
 import { X } from 'lucide-react'
 import { Dialog, DropdownMenu } from 'radix-ui'
-import { useState, type ReactNode } from 'react'
+import { useRef, useState, type ReactNode, type RefObject } from 'react'
 
 import { cn } from '@/utils/cn'
 
@@ -16,6 +16,12 @@ interface ModalProps {
   /** Rodapé fixo com as ações. */
   footer?: ReactNode
   size?: 'sm' | 'md' | 'lg'
+  /**
+   * Elemento que recebe o foco quando a janela fecha. Por padrão, o foco volta para
+   * o elemento que estava focado ao abrir; informe quando isso não bastar (no iPhone,
+   * tocar em um botão não o deixa focado).
+   */
+  returnFocusRef?: RefObject<HTMLElement | null>
 }
 
 const MODAL_SIZES = { sm: 'lg:max-w-sm', md: 'lg:max-w-lg', lg: 'lg:max-w-2xl' } as const
@@ -32,13 +38,28 @@ export function Modal({
   children,
   footer,
   size = 'md',
+  returnFocusRef,
 }: ModalProps) {
+  const opener = useRef<HTMLElement | null>(null)
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="bg-ink-900/45 animate-fade-in z-overlay fixed inset-0 backdrop-blur-[2px]" />
         <Dialog.Content
           aria-describedby={description ? undefined : undefined}
+          onOpenAutoFocus={() => {
+            const focused = document.activeElement
+            opener.current = focused instanceof HTMLElement ? focused : null
+          }}
+          onCloseAutoFocus={(event) => {
+            // Sem isto o foco se perderia ao fechar: leitores de tela e teclado
+            // voltariam para o início da página.
+            const target = returnFocusRef?.current ?? opener.current
+            if (target?.isConnected && target !== document.body) {
+              event.preventDefault()
+              target.focus()
+            }
+          }}
           className={cn(
             'bg-canvas z-overlay animate-rise fixed inset-x-0 bottom-0 flex max-h-[92dvh] flex-col outline-none',
             'rounded-t-sheet shadow-raised',

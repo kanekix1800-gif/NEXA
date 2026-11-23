@@ -238,3 +238,83 @@ test.describe('Locais acessíveis e bairros', () => {
     await expect(page.getByText('Morador · São Francisco')).toBeVisible()
   })
 })
+
+test.describe('Correções da revisão de acessibilidade', () => {
+  test('a sugestão da NEXA IA sobre ônibus responde com linhas e abre a linha escolhida', async ({
+    page,
+  }) => {
+    await signInDemo(page, 'resident')
+    await open(page, '/ia')
+    await page.getByRole('button', { name: 'Ônibus acessíveis e barreiras' }).click()
+    const line = page.getByRole('link', { name: /Linha 101/ })
+    await expect(line).toBeVisible()
+    await line.click()
+    await expect(page.getByRole('heading', { name: 'Linha selecionada' })).toBeVisible()
+  })
+
+  test('a linha aberta por link continua visível com qualquer filtro', async ({ page }) => {
+    await signInDemo(page, 'resident')
+    await open(page, '/mobilidade?aba=onibus&linha=lin_401')
+    const selected = page.getByRole('heading', { name: /Linha 401/ })
+    await expect(page.getByRole('heading', { name: 'Linha selecionada' })).toBeVisible()
+    await expect(selected).toHaveCount(1)
+
+    // A linha 401 não tem ônibus acessíveis, mas foi a que a pessoa pediu para ver.
+    await page.getByRole('radio', { name: 'Acessíveis' }).click()
+    await expect(page.getByText('7 linhas · 7 com ônibus acessíveis')).toBeVisible()
+    await expect(selected).toHaveCount(1)
+  })
+
+  test('o campo Bairro diz o bairro escolhido e recebe o foco de volta', async ({ page }) => {
+    await signInDemo(page, 'resident')
+    await open(page, '/perfil/editar')
+    const field = page.getByRole('button', { name: 'Bairro: Vila Esperança' })
+    await field.click()
+    const dialog = page.getByRole('dialog')
+    await dialog.getByLabel('Buscar bairro').fill('boa vista')
+    await dialog.getByRole('button', { name: 'Boa Vista' }).click()
+    await expect(dialog).toBeHidden()
+
+    const updated = page.getByRole('button', { name: 'Bairro: Boa Vista' })
+    await expect(updated).toBeVisible()
+    await expect(updated).toBeFocused()
+  })
+
+  test('editar um evento para informar a acessibilidade não muda quem organiza', async ({
+    page,
+  }) => {
+    await signInDemo(page, 'institution')
+    await open(page, '/eventos/evt_03/editar')
+    await page.getByRole('checkbox', { name: 'Audiodescrição' }).check()
+    await page.getByRole('button', { name: 'Salvar alterações' }).click()
+    await expect(page).toHaveURL(/#\/eventos\/evt_03$/)
+    await expect(page.getByRole('region', { name: 'Acessibilidade' })).toContainText(
+      'Audiodescrição',
+    )
+    const organizer = page
+      .locator('section')
+      .filter({ has: page.getByRole('heading', { name: 'Organização' }) })
+    await expect(organizer).toContainText('Prefeitura Municipal')
+    await expect(organizer).not.toContainText('Roberto Nunes')
+  })
+
+  test('há um único atalho "Pular para o conteúdo" e ele não sai da tela', async ({ page }) => {
+    await signInDemo(page, 'resident')
+    await open(page, '/demandas')
+    const skip = page.getByRole('button', { name: 'Pular para o conteúdo' })
+    await expect(skip).toHaveCount(1)
+    await expect(page.getByRole('link', { name: 'Pular para o conteúdo' })).toHaveCount(0)
+    await skip.focus()
+    await page.keyboard.press('Enter')
+    await expect(page).toHaveURL(/#\/demandas$/)
+    await expect(page.locator('main')).toBeFocused()
+  })
+
+  test('nas áreas com abas, o título do documento diz a aba atual', async ({ page }) => {
+    await signInDemo(page, 'merchant')
+    await open(page, '/business/produtos')
+    await expect(page).toHaveTitle('NEXA Business, Produtos · NEXA')
+    await open(page, '/business/vendas')
+    await expect(page).toHaveTitle('NEXA Business, Vendas · NEXA')
+  })
+})

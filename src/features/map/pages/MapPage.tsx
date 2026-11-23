@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router'
 
 import { paths } from '@/app/paths'
+import { SpeakButton } from '@/components/accessibility'
 import { DemandStatusBadge } from '@/components/domain'
 import { MapView } from '@/components/map'
 import {
@@ -46,8 +47,8 @@ const LAYER_DOT: Record<MapLayer, string> = {
 function initialLayers(only: MapLayer | null, focusId: string | null): Set<MapLayer> {
   if (only && LAYERS.includes(only)) return new Set([only])
   const layers = new Set(LAYERS.filter((layer) => !MOBILITY_LAYERS.includes(layer)))
-  const highlights = getPreferences().highlights
-  if (highlights.includes('step_free') || highlights.includes('audio_tactile')) {
+  const { highlights, proximityAlerts } = getPreferences()
+  if (proximityAlerts || highlights.includes('step_free') || highlights.includes('audio_tactile')) {
     layers.add('accessibility')
   }
   if (highlights.includes('accessible_transit')) layers.add('transit')
@@ -206,9 +207,23 @@ export default function MapPage() {
               <MapPin className="mt-0.5 size-3.5 shrink-0" aria-hidden />
               {selected.addressLabel}
             </p>
-            <ButtonLink to={selected.to} fullWidth className="mt-3">
-              Ver detalhes
-            </ButtonLink>
+            <div className="mt-3 flex items-center gap-2">
+              <ButtonLink to={selected.to} fullWidth>
+                Ver detalhes
+              </ButtonLink>
+              <SpeakButton
+                label={`Ouvir sobre ${selected.title}`}
+                text={() =>
+                  [
+                    `${MAP_LAYER_LABEL[selected.layer]}, ${selected.categoryLabel}.`,
+                    `${selected.title}.`,
+                    selected.description,
+                    selected.meta ? `${selected.meta}.` : '',
+                    `Local: ${selected.addressLabel}.`,
+                  ].join(' ')
+                }
+              />
+            </div>
           </aside>
         )}
       </div>

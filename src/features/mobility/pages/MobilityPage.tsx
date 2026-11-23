@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import {
   BusFront,
   Clock,
@@ -40,7 +40,7 @@ import { useAccessibilityPreferences } from '@/hooks/useAccessibility'
 import { repos } from '@/repositories'
 import { playSound, signalAlert } from '@/services/accessibility/feedback'
 import { updatePreferences } from '@/services/accessibility/preferences'
-import { stopSpeaking } from '@/services/accessibility/speech'
+import { isSpeaking, speak, stopSpeaking } from '@/services/accessibility/speech'
 import {
   describeAccessPoint,
   describeLine,
@@ -258,6 +258,19 @@ function BusesTab({ lineId, stopId }: { lineId: string | null; stopId: string | 
         neighborhoodId: neighborhoodId || undefined,
         search,
       }),
+    // A lista anterior fica na tela enquanto a nova chega (sem piscar a cada letra)…
+    placeholderData: keepPreviousData,
+    // …e as "próximas partidas" não ficam paradas no tempo com a tela aberta.
+    refetchInterval: 60_000,
+    refetchOnWindowFocus: true,
+  })
+  // A linha aberta por um link aparece sempre, qualquer que seja o filtro escolhido.
+  const focusedLine = useQuery({
+    queryKey: ['mobility', 'line', lineId],
+    queryFn: () => repos.mobility.getLine(lineId ?? ''),
+    enabled: lineId !== null,
+    refetchInterval: 60_000,
+    retry: false,
   })
   const stops = useQuery({
     queryKey: ['mobility', 'stops'],
@@ -273,6 +286,15 @@ function BusesTab({ lineId, stopId }: { lineId: string | null; stopId: string | 
           <SectionHeader title="Parada selecionada" />
           <ul>
             <StopCard stop={focusedStop} highlighted />
+          </ul>
+        </section>
+      )}
+
+      {focusedLine.data && (
+        <section className="flex flex-col gap-2.5">
+          <SectionHeader title="Linha selecionada" />
+          <ul>
+            <LineCard line={focusedLine.data} highlighted />
           </ul>
         </section>
       )}
@@ -316,9 +338,11 @@ function BusesTab({ lineId, stopId }: { lineId: string | null; stopId: string | 
                 {items.filter((line) => line.accessible).length} com ônibus acessíveis
               </p>
               <ul className="flex flex-col gap-3">
-                {items.map((line) => (
-                  <LineCard key={line.id} line={line} highlighted={line.id === lineId} />
-                ))}
+                {items
+                  .filter((line) => line.id !== focusedLine.data?.id)
+                  .map((line) => (
+                    <LineCard key={line.id} line={line} />
+                  ))}
               </ul>
             </>
           )}
@@ -456,6 +480,7 @@ function PathTab({ pointId }: { pointId: string | null }) {
         audience: audience || undefined,
         search,
       }),
+    placeholderData: keepPreviousData,
   })
 
   return (
@@ -610,6 +635,11 @@ function AlertsTab() {
     alerted.current = new Set()
     setAlert(null)
     setTracking('starting')
+    // Fala dentro do toque: confirma a ação e libera a voz para os alertas que virão.
+    playSound('on', { force: true })
+    speak('Acompanhamento ligado. Vou avisar quando houver uma barreira por perto.', {
+      interrupt: true,
+    })
     watchId.current = navigator.geolocation.watchPosition(
       (result) => {
         const position = { lat: result.coords.latitude, lng: result.coords.longitude }
@@ -638,13 +668,26 @@ function AlertsTab() {
     setAlert(null)
     setSimulating(true)
     playSound('on', { force: true })
+    // Fala dentro do toque: confirma a ação e libera a voz para os alertas que virão.
+    speak('Simulação iniciada. Vou avisar quando houver uma barreira por perto.', {
+      interrupt: true,
+    })
     let index = 0
+    let waited = 0
     const advance = () => {
       const step = steps[index]
       if (!step) {
         stopSimulation()
         return
       }
+      // Antes de seguir para a barreira seguinte, espera o alerta anterior terminar de
+      // ser falado (com limite, porque alguns navegadores não avisam o fim da fala).
+      const previous = steps[index - 1]
+      if (previous && previous.target.id !== step.target.id && isSpeaking() && waited < 8) {
+        waited += 1
+        return
+      }
+      waited = 0
       evaluateRef.current(step.position)
       index += 1
     }
@@ -725,6 +768,11 @@ function AlertsTab() {
         </div>
         <p className="text-ink-800 text-[0.8125rem] font-semibold" role="status" aria-live="polite">
           {trackingMessage[tracking]}
+          {prefs.proximityAlerts && tracking === 'off' && (
+            <span className="text-ink-600 block font-normal">
+              Você pediu alertas de barreiras: toque no botão abaixo para começar a acompanhar.
+            </span>
+          )}
         </p>
         <Button
           variant="secondary"
@@ -746,11 +794,16 @@ function AlertsTab() {
       <Card padding="none" className="px-4">
         <SwitchRow
           title="Alertas de barreiras no caminho"
-          description="Lembra esta preferência no aparelho e liga os destaques de barreiras no mapa."
+          description="Liga o acompanhamento com a sua localização, mostra as barreiras no mapa e lembra esta escolha no aparelho."
           checked={prefs.proximityAlerts}
           onChange={(checked) => {
             updatePreferences({ proximityAlerts: checked })
-            playSound(checked ? 'on' : 'off')
+            // O acompanhamento começa aqui, dentro do toque (o navegador pede a localização).
+            if (checked) startTracking()
+            else {
+              stopTracking()
+              playSound('off')
+            }
           }}
         />
       </Card>

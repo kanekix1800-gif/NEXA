@@ -213,12 +213,6 @@ export function AppLayout() {
 
   return (
     <div className="min-h-dvh lg:pl-64">
-      <a
-        href="#conteudo"
-        className="bg-nexa-900 z-toast sr-only rounded-full px-4 py-2 text-sm font-bold text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
-      >
-        Pular para o conteúdo
-      </a>
       <Sidebar onCreate={() => setCreating(true)} unread={unread} />
       <main id="conteudo" className="min-h-dvh">
         <Outlet />

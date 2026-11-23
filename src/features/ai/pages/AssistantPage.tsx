@@ -7,6 +7,7 @@ import { DictationButton } from '@/components/accessibility'
 import { ActionMenu, AppIcon, ConfirmDialog, DemoBadge, IconButton, notify } from '@/components/ui'
 import { config } from '@/config'
 import { useCurrentUser } from '@/contexts/AuthContext'
+import { useAccessibilityPreferences } from '@/hooks/useAccessibility'
 import { repos } from '@/repositories'
 import { AI_GREETING, AI_MODE, askAssistant, quickPromptsFor } from '@/services/ai/assistant'
 import type { AIMessage } from '@/types'
@@ -116,6 +117,7 @@ export default function AssistantPage() {
   const [thinking, setThinking] = useState(false)
   const [confirmClear, setConfirmClear] = useState(false)
   const endRef = useRef<HTMLDivElement>(null)
+  const { readerButton } = useAccessibilityPreferences()
   const prompts = quickPromptsFor(user)
 
   // Carrega o histórico uma única vez; depois a conversa vive no estado local.
@@ -201,7 +203,10 @@ export default function AssistantPage() {
         </div>
       </header>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4" aria-live="polite">
+      <div
+        className={cn('min-h-0 flex-1 overflow-y-auto px-5 py-4', readerButton && 'pb-20')}
+        aria-live="polite"
+      >
         <div className="flex flex-col gap-4">
           <Bubble
             message={{ id: 'saudacao', role: 'assistant', content: AI_GREETING, createdAt: '' }}

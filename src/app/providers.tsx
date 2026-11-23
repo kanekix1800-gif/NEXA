@@ -3,9 +3,10 @@ import { MotionConfig } from 'motion/react'
 import { useEffect, useRef, type ReactNode } from 'react'
 
 import { notify, Toaster } from '@/components/ui/toast'
-import { AuthProvider } from '@/contexts/AuthContext'
+import { AuthProvider, useAuth } from '@/contexts/AuthContext'
 import { useAccessibilityPreferences } from '@/hooks/useAccessibility'
-import { subscribeToDataChanges, subscribeToPersistErrors } from '@/repositories'
+import { repos, subscribeToDataChanges, subscribeToPersistErrors } from '@/repositories'
+import { getPreferences, updatePreferences } from '@/services/accessibility/preferences'
 
 import { queryClient } from './queryClient'
 
@@ -54,12 +55,39 @@ function MotionPreference({ children }: { children: ReactNode }) {
   )
 }
 
+/**
+ * O movimento reduzido era uma configuração da conta e passou a ser uma opção de
+ * acessibilidade do aparelho. Quem já tinha escolhido "reduzido" continua com a
+ * interface sem animações: a escolha é levada para o aparelho uma única vez.
+ */
+function LegacyMotionMigration() {
+  const { user } = useAuth()
+  const userId = user?.id
+  useEffect(() => {
+    if (!userId) return
+    let cancelled = false
+    void repos.settings
+      .get()
+      .then((settings) => {
+        if (cancelled || settings.motion !== 'reduced') return
+        if (getPreferences().motion === 'system') updatePreferences({ motion: 'reduced' })
+        return repos.settings.update({ motion: 'system' })
+      })
+      .catch(() => undefined)
+    return () => {
+      cancelled = true
+    }
+  }, [userId])
+  return null
+}
+
 /** Provedores globais do aplicativo (consultas, autenticação, movimento e avisos). */
 export function AppProviders({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <DataChangeBridge />
       <AuthProvider>
+        <LegacyMotionMigration />
         <MotionPreference>{children}</MotionPreference>
       </AuthProvider>
       <Toaster />

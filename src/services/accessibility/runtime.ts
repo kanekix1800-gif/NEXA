@@ -1,6 +1,6 @@
 import { describeElement } from './describe'
 import { applyToDocument, getPreferences, subscribeToPreferences } from './preferences'
-import { speak } from './speech'
+import { speak, unlockSpeech } from './speech'
 
 /**
  * INICIALIZAÇÃO DA ACESSIBILIDADE
@@ -62,6 +62,16 @@ export function startAccessibility(): void {
     lastSpoken = { text, at: now }
     speak(text, { interrupt: true })
   }
+
+  // Primeiro toque da pessoa: libera a voz para os anúncios que não partem de um toque
+  // (nome da tela, avisos, alertas de barreira). Ver `unlockSpeech`.
+  const unlock = () => {
+    unlockSpeech()
+    document.removeEventListener('touchend', unlock, true)
+    document.removeEventListener('click', unlock, true)
+  }
+  document.addEventListener('touchend', unlock, true)
+  document.addEventListener('click', unlock, true)
 
   // `pointerup` (e não `pointerdown`): rolar a tela cancela o toque e não dispara a leitura.
   document.addEventListener('pointerup', (event) => speakTarget(event.target), true)

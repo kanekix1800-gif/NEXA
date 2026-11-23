@@ -89,8 +89,8 @@ function EventForm({ event }: { event: EventView | null }) {
         location,
         capacity: capacity ? Number(capacity) : null,
         accessibility,
-        organizerAs,
-        shareOnFeed,
+        // Quem organiza e a divulgação no feed são decididos apenas na criação.
+        ...(event ? {} : { organizerAs, shareOnFeed }),
       }
       return event ? repos.events.update(event.id, input) : repos.events.create(input)
     },

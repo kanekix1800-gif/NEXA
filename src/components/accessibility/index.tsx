@@ -1,6 +1,6 @@
 import { Mic, Square, Volume2 } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router'
+import { useLocation, useMatches } from 'react-router'
 
 import { useAccessibilityPreferences } from '@/hooks/useAccessibility'
 import { readableText } from '@/services/accessibility/describe'
@@ -13,6 +13,9 @@ import { cn } from '@/utils/cn'
  * Peças pequenas usadas em todo o app: atalho para o conteúdo, anúncio de telas,
  * leitura em voz alta e ditado por voz.
  */
+
+/** Identificador da rota que contém o layout do app (com a navegação inferior). */
+export const APP_ROUTE_ID = 'app'
 
 /** Primeiro item ao navegar por teclado: leva o foco direto ao conteúdo da tela. */
 export function SkipLink() {
@@ -33,10 +36,18 @@ export function SkipLink() {
   )
 }
 
-/** Título da tela atual: o primeiro `h1`. */
+function text(element: Element | null): string {
+  return (element?.textContent ?? '').replace(/\s+/g, ' ').trim()
+}
+
+/**
+ * Título da tela atual: o primeiro `h1`, seguido da aba ativa quando a área tem
+ * várias telas com o mesmo título (NEXA Business e Administração).
+ */
 function currentScreenTitle(): string {
-  const heading = document.querySelector('main h1, h1')
-  return (heading?.textContent ?? '').replace(/\s+/g, ' ').trim()
+  const title = text(document.querySelector('main h1, h1'))
+  const tab = text(document.querySelector('main header nav a[aria-current="page"]'))
+  return title && tab && tab !== title ? `${title}, ${tab}` : title
 }
 
 /**
@@ -49,6 +60,8 @@ export function RouteAnnouncer() {
   const { announceScreens } = useAccessibilityPreferences()
   const [message, setMessage] = useState('')
   const first = useRef(true)
+  /** Última tela anunciada: filtros e abas mudam o endereço, mas não a tela. */
+  const announced = useRef('')
   const announce = useRef(announceScreens)
   useEffect(() => {
     announce.current = announceScreens
@@ -62,10 +75,18 @@ export function RouteAnnouncer() {
       if (title === '' && tries < 14) return
       window.clearInterval(timer)
       document.title = title ? `${title} · NEXA` : 'NEXA — Conexões que transformam realidades'
-      if (title === '') return
-      // Na primeira tela o leitor de tela já anuncia o documento sozinho.
-      if (!first.current) setMessage(`Tela: ${title}`)
+
+      const isFirst = first.current
       first.current = false
+      const key = `${location.pathname}|${title}`
+      if (key === announced.current) return
+      announced.current = key
+      if (title === '') {
+        setMessage('')
+        return
+      }
+      // Na primeira tela o leitor de tela já anuncia o documento sozinho.
+      if (!isFirst) setMessage(`Tela: ${title}`)
       if (announce.current) speak(`Tela: ${title}`)
     }, 140)
     return () => window.clearInterval(timer)
@@ -78,29 +99,38 @@ export function RouteAnnouncer() {
   )
 }
 
-/** Controla uma leitura em voz alta: começa, para e informa se está falando. */
+/**
+ * Controla uma leitura em voz alta: começa, para e informa se está falando.
+ * Só interrompe a fala que ele mesmo iniciou — avisos e anúncios de tela em andamento
+ * não são cortados por um botão que não estava lendo nada.
+ */
 export function useSpeaker() {
   const [speaking, setSpeaking] = useState(false)
+  const active = useRef(false)
   const mounted = useRef(true)
+
   useEffect(() => {
     mounted.current = true
     return () => {
       mounted.current = false
+      // A leitura iniciada por este botão não continua depois que ele sai da tela.
+      if (active.current) stopSpeaking()
     }
   }, [])
 
   const stop = useCallback(() => {
-    stopSpeaking()
-    setSpeaking(false)
+    if (active.current) stopSpeaking()
   }, [])
 
-  const start = useCallback((text: string) => {
-    const ok = speak(text, {
+  const start = useCallback((content: string) => {
+    const ok = speak(content, {
       interrupt: true,
       onEnd: () => {
+        active.current = false
         if (mounted.current) setSpeaking(false)
       },
     })
+    active.current = ok
     setSpeaking(ok)
     return ok
   }, [])
@@ -117,7 +147,7 @@ interface SpeakButtonProps {
 }
 
 /** Botão "Ouvir": lê em voz alta um trecho do conteúdo. Some se o aparelho não tiver voz. */
-export function SpeakButton({ text, label, className }: SpeakButtonProps) {
+export function SpeakButton({ text: content, label, className }: SpeakButtonProps) {
   const { speaking, start, stop, supported } = useSpeaker()
   if (!supported) return null
   return (
@@ -125,7 +155,7 @@ export function SpeakButton({ text, label, className }: SpeakButtonProps) {
       type="button"
       aria-label={speaking ? 'Parar a leitura' : label}
       aria-pressed={speaking}
-      onClick={() => (speaking ? stop() : start(text()))}
+      onClick={() => (speaking ? stop() : start(content()))}
       className={cn(
         'inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-[0.8125rem] font-bold transition-colors',
         speaking ? 'bg-nexa-900 text-white' : 'bg-nexa-50 text-nexa-900 hover:bg-nexa-100',
@@ -149,9 +179,10 @@ export function SpeakButton({ text, label, className }: SpeakButtonProps) {
 export function ReaderButton() {
   const { readerButton } = useAccessibilityPreferences()
   const location = useLocation()
+  const insideApp = useMatches().some((match) => match.id === APP_ROUTE_ID)
   const { speaking, start, stop, supported } = useSpeaker()
 
-  // Ao trocar de tela, a leitura da tela anterior para.
+  // Ao trocar de tela, a leitura da tela anterior para (outras falas seguem).
   useEffect(() => stop, [location.pathname, stop])
 
   if (!readerButton || !supported) return null
@@ -165,11 +196,16 @@ export function ReaderButton() {
           stop()
           return
         }
-        const text = readableText(document.querySelector('main'))
-        start(text || 'Não há conteúdo para ler nesta tela.')
+        const content = readableText(document.querySelector('main'))
+        start(content || 'Não há conteúdo para ler nesta tela.')
       }}
       className={cn(
-        'shadow-float z-fab fixed bottom-[calc(var(--nexa-bottom-nav-height)+var(--nexa-safe-bottom)+5.25rem)] left-4 inline-flex h-12 items-center gap-2 rounded-full px-4 text-sm font-bold transition-colors lg:right-10 lg:bottom-28 lg:left-auto',
+        'shadow-float z-fab fixed left-4 inline-flex h-12 items-center gap-2 rounded-full px-4 text-sm font-bold transition-colors lg:right-10 lg:bottom-28 lg:left-auto',
+        // No app, fica acima da navegação inferior e da linha dos botões de ação;
+        // nas telas de entrada, encosta na base (elas reservam esse espaço).
+        insideApp
+          ? 'bottom-[calc(var(--nexa-bottom-nav-height)+var(--nexa-safe-bottom)+5.25rem)]'
+          : 'bottom-[calc(var(--nexa-safe-bottom)+0.75rem)]',
         speaking ? 'bg-sun-400 text-ink-900' : 'bg-nexa-900 text-white',
       )}
     >
@@ -228,9 +264,10 @@ interface DictationButtonProps {
 }
 
 /**
- * Microfone ao lado de um campo: transforma a fala em texto. Aparece quando o ditado
- * está ligado em Acessibilidade e o navegador oferece reconhecimento de voz — que é
- * feito pelo navegador e pode enviar o áudio ao serviço do fabricante.
+ * Microfone ao lado de um campo: transforma a fala em texto, uma frase por toque.
+ * Aparece quando o ditado está ligado em Acessibilidade e o navegador oferece
+ * reconhecimento de voz — que é feito pelo navegador e pode enviar o áudio ao
+ * serviço do fabricante.
  */
 export function DictationButton({ onText, onError, field, className }: DictationButtonProps) {
   const { dictation } = useAccessibilityPreferences()
@@ -251,15 +288,26 @@ export function DictationButton({ onText, onError, field, className }: Dictation
       recognition.current?.stop()
       return
     }
+    // O microfone não deve captar a própria voz do aplicativo.
+    stopSpeaking()
     const instance = new Constructor()
     instance.lang = 'pt-BR'
-    instance.continuous = true
+    // Uma frase por toque: no modo contínuo, alguns navegadores repetem o texto já entregue.
+    instance.continuous = false
     instance.interimResults = false
+    let delivered = ''
     instance.onresult = (event) => {
       for (let index = event.resultIndex; index < event.results.length; index += 1) {
         const result = event.results[index]
         const transcript = result?.[0]?.transcript.trim()
-        if (result?.isFinal && transcript) handlers.current.onText(transcript)
+        if (!result?.isFinal || !transcript || transcript === delivered) continue
+        // Se o navegador reenviar o que já foi entregue, aproveita só o trecho novo.
+        const fresh =
+          delivered && transcript.startsWith(delivered)
+            ? transcript.slice(delivered.length).trim()
+            : transcript
+        delivered = transcript
+        if (fresh) handlers.current.onText(fresh)
       }
     }
     instance.onerror = (event) => {

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Check, ChevronDown, MapPin } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 
 import { Modal, SearchInput, useFieldControl } from '@/components/ui'
 import { repos } from '@/repositories'
@@ -70,6 +70,7 @@ export function NeighborhoodPicker({
   className,
 }: NeighborhoodPickerProps) {
   const control = useFieldControl({})
+  const trigger = useRef<HTMLButtonElement>(null)
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const neighborhoods = useQuery({
@@ -94,12 +95,14 @@ export function NeighborhoodPicker({
   return (
     <>
       <button
+        ref={trigger}
         type="button"
         id={control.id}
         aria-describedby={control['aria-describedby']}
         data-invalid={control['aria-invalid'] ? '' : undefined}
         aria-haspopup="dialog"
-        aria-label={ariaLabel ? `${ariaLabel}: ${label}` : undefined}
+        // O nome inclui a escolha atual: "Bairro: Centro" (o <label> sozinho diria só "Bairro").
+        aria-label={`${ariaLabel ?? 'Bairro'}: ${label}`}
         onClick={() => setOpen(true)}
         className={cn(
           variant === 'field'
@@ -121,6 +124,7 @@ export function NeighborhoodPicker({
           setOpen(next)
           if (!next) setQuery('')
         }}
+        returnFocusRef={trigger}
         title={allLabel ? 'Filtrar por bairro' : 'Escolher bairro'}
         description="Digite para procurar pelo nome do bairro ou pela região."
       >

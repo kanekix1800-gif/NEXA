@@ -9,6 +9,8 @@ import { BrandBackdrop, WaveEdge } from '@/components/brand/OrganicShapes'
 import { ShareAppButton } from '@/components/domain/ShareAppDialog'
 import { ButtonLink } from '@/components/ui'
 import { config } from '@/config'
+import { useAccessibilityPreferences } from '@/hooks/useAccessibility'
+import { cn } from '@/utils/cn'
 
 const rise = (delay: number) => ({
   initial: { opacity: 0, y: 18 },
@@ -18,6 +20,7 @@ const rise = (delay: number) => ({
 
 /** Tela de abertura: marca, slogan, cidade ilustrada e os primeiros passos. */
 export default function WelcomePage() {
+  const { readerButton } = useAccessibilityPreferences()
   return (
     <div className="relative min-h-dvh overflow-hidden">
       <BrandBackdrop />
@@ -35,6 +38,7 @@ export default function WelcomePage() {
           {...rise(0)}
           className="flex flex-1 flex-col items-center justify-center px-6 pt-4"
         >
+          <h1 className="sr-only">NEXA — boas-vindas</h1>
           <Logo size="xl" layout="stacked" withTagline />
         </motion.div>
 
@@ -50,7 +54,13 @@ export default function WelcomePage() {
 
         <motion.div
           {...rise(0.3)}
-          className="flex flex-col items-center gap-2 px-6 pt-2 pb-[calc(1.5rem+var(--nexa-safe-bottom))]"
+          className={cn(
+            'flex flex-col items-center gap-2 px-6 pt-2',
+            // Com "Ouvir tela" ligado, o botão flutuante fica abaixo das ações, e não sobre elas.
+            readerButton
+              ? 'pb-[calc(5rem+var(--nexa-safe-bottom))]'
+              : 'pb-[calc(1.5rem+var(--nexa-safe-bottom))]',
+          )}
         >
           <ButtonLink to={paths.onboarding} size="lg" fullWidth>
             Começar

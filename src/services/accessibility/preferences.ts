@@ -59,7 +59,10 @@ export interface AccessibilityPreferences {
 
   // ── Mobilidade ──
   highlights: MobilityHighlight[]
-  /** Avisa por voz, som e vibração ao se aproximar de uma barreira. */
+  /**
+   * A pessoa quer ser avisada das barreiras no caminho: mostra-as no mapa e lembra a
+   * escolha na aba Alertas (o acompanhamento da posição começa lá, com um toque).
+   */
   proximityAlerts: boolean
 }
 

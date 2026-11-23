@@ -606,7 +606,7 @@ export default function AccessibilityPage() {
             {row(
               'proximityAlerts',
               'Alertas de barreiras no caminho',
-              'Com a localização ligada, avisa por voz, som e vibração ao se aproximar de escadas, degraus e outros obstáculos.',
+              'Mostra as barreiras no mapa. O aviso por voz, som e vibração ao se aproximar de escadas e degraus é ligado na aba Alertas da Mobilidade acessível.',
             )}
           </Card>
           {signedIn ? (

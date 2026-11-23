@@ -119,11 +119,24 @@ export function splitForSpeech(text: string, maxLength = 220): string[] {
 export interface SpeakOptions {
   /** Interrompe o que estiver sendo falado (padrão: entra na fila). */
   interrupt?: boolean
-  /** Chamado quando a fala termina ou é cancelada. */
+  /**
+   * Chamado uma única vez quando esta fala termina — porque chegou ao fim, porque
+   * outra fala a interrompeu ou porque `stopSpeaking()` foi chamado.
+   */
   onEnd?: () => void
 }
 
-let generation = 0
+/**
+ * Fala que tem alguém esperando o fim (um botão "Ouvir" mostrando "Parar").
+ * Só existe uma por vez: uma nova fala com `onEnd` ou com `interrupt` encerra a anterior.
+ */
+let activeEnd: (() => void) | null = null
+
+function settle(): void {
+  const end = activeEnd
+  activeEnd = null
+  end?.()
+}
 
 /** Fala um texto com a voz, a velocidade e o tom escolhidos nas preferências. */
 export function speak(text: string, options: SpeakOptions = {}): boolean {
@@ -134,13 +147,19 @@ export function speak(text: string, options: SpeakOptions = {}): boolean {
     return false
   }
   if (options.interrupt) {
-    generation += 1
+    // Quem estava sendo ouvido é avisado na hora: o navegador nem sempre dispara
+    // o fim de uma fala cancelada.
+    settle()
     engine.cancel()
+  } else if (options.onEnd) {
+    settle()
   }
-  const mine = generation
+
   const prefs = getPreferences()
   const voices = portugueseVoices()
   const voice = voices.find((candidate) => candidate.voiceURI === prefs.voiceURI) ?? voices[0]
+  const onEnd = options.onEnd
+  if (onEnd) activeEnd = onEnd
 
   chunks.forEach((chunk, index) => {
     const utterance = new SpeechSynthesisUtterance(chunk)
@@ -148,10 +167,10 @@ export function speak(text: string, options: SpeakOptions = {}): boolean {
     if (voice) utterance.voice = voice
     utterance.rate = prefs.speechRate
     utterance.pitch = prefs.speechPitch
-    if (index === chunks.length - 1 && options.onEnd) {
+    if (index === chunks.length - 1 && onEnd) {
       const done = () => {
-        // Uma fala cancelada por outra mais nova não deve avisar que "terminou".
-        if (mine === generation || !options.interrupt) options.onEnd?.()
+        // Só encerra se esta ainda for a fala em andamento.
+        if (activeEnd === onEnd) settle()
       }
       utterance.onend = done
       utterance.onerror = done
@@ -163,11 +182,33 @@ export function speak(text: string, options: SpeakOptions = {}): boolean {
 
 /** Interrompe qualquer fala em andamento. */
 export function stopSpeaking(): void {
-  generation += 1
+  settle()
   synth()?.cancel()
 }
 
 export function isSpeaking(): boolean {
   const engine = synth()
   return Boolean(engine && (engine.speaking || engine.pending))
+}
+
+let unlocked = false
+
+/**
+ * Libera a voz no iPhone. O Safari ignora, em silêncio, qualquer fala iniciada fora
+ * de um toque enquanto a página ainda não tiver falado DENTRO de um toque. Chamada
+ * no primeiro toque da pessoa, esta função faz uma fala vazia e inaudível — a partir
+ * daí, anúncios de tela, avisos e alertas de barreira podem ser falados.
+ */
+export function unlockSpeech(): void {
+  const engine = synth()
+  if (unlocked || !engine || !isSpeechSupported()) return
+  unlocked = true
+  try {
+    // Sem `cancel()`: não pode cortar uma fala que esteja em andamento.
+    const silent = new SpeechSynthesisUtterance('')
+    silent.volume = 0
+    engine.speak(silent)
+  } catch {
+    // Navegador sem suporte completo: as falas iniciadas por toque continuam funcionando.
+  }
 }

@@ -18,7 +18,13 @@ import {
   subscribeToPreferences,
   updatePreferences,
 } from './preferences'
-import { sortPortugueseVoices, splitForSpeech } from './speech'
+import {
+  isSpeechSupported,
+  sortPortugueseVoices,
+  speak,
+  splitForSpeech,
+  stopSpeaking,
+} from './speech'
 
 function preset(key: string) {
   const found = PRESETS.find((item) => item.key === key)
@@ -179,6 +185,74 @@ describe('voz', () => {
   })
 })
 
+describe('fim da fala (botões "Ouvir" e "Parar")', () => {
+  /** Motor de voz de mentira: guarda as falas e deixa o teste decidir quando terminam. */
+  function fakeEngine() {
+    const queue: Array<{ text: string; onend: (() => void) | null }> = []
+    class Utterance {
+      text: string
+      lang = ''
+      rate = 1
+      pitch = 1
+      volume = 1
+      voice = null
+      onend: (() => void) | null = null
+      onerror: (() => void) | null = null
+      constructor(text: string) {
+        this.text = text
+      }
+    }
+    const engine = {
+      speaking: false,
+      pending: false,
+      speak: (utterance: Utterance) => queue.push(utterance),
+      // Como em vários navegadores, cancelar NÃO dispara o fim das falas.
+      cancel: () => queue.splice(0, queue.length),
+      getVoices: () => [],
+    }
+    Object.defineProperty(window, 'speechSynthesis', { value: engine, configurable: true })
+    Object.assign(globalThis, { SpeechSynthesisUtterance: Utterance })
+    return queue
+  }
+
+  it('avisa o fim quando a fala termina, é interrompida por outra ou é parada', () => {
+    const queue = fakeEngine()
+    expect(isSpeechSupported()).toBe(true)
+    let ended = 0
+    const onEnd = () => {
+      ended += 1
+    }
+
+    // Termina naturalmente.
+    speak('Primeira leitura.', { interrupt: true, onEnd })
+    queue.at(-1)?.onend?.()
+    expect(ended).toBe(1)
+
+    // Outra fala interrompe: quem estava lendo é avisado na hora, uma única vez.
+    speak('Segunda leitura.', { interrupt: true, onEnd })
+    speak('Item tocado, botão', { interrupt: true })
+    expect(ended).toBe(2)
+
+    // Parada manual.
+    speak('Terceira leitura.', { interrupt: true, onEnd })
+    stopSpeaking()
+    stopSpeaking()
+    expect(ended).toBe(3)
+  })
+
+  it('uma fala em fila (aviso, nome da tela) não encerra a leitura em andamento', () => {
+    const queue = fakeEngine()
+    let ended = 0
+    speak('Leitura longa da tela.', { interrupt: true, onEnd: () => (ended += 1) })
+    speak('Demanda registrada!')
+    expect(ended).toBe(0)
+    expect(queue.map((item) => item.text)).toEqual([
+      'Leitura longa da tela.',
+      'Demanda registrada!',
+    ])
+  })
+})
+
 describe('descrição falada dos elementos', () => {
   function render(html: string): HTMLElement {
     document.body.innerHTML = html
@@ -201,6 +275,22 @@ describe('descrição falada dos elementos', () => {
   it('toque em um ícone dentro do botão fala o botão inteiro', () => {
     const body = render(`<button><span id="dentro">Ouvir</span> tela</button>`)
     expect(describeElement(body.querySelector('#dentro'))).toBe('Ouvir tela, botão')
+  })
+
+  it('toque em um ícone decorativo dentro de um botão não fica mudo', () => {
+    const body = render(`
+      <button aria-label="Fechar"><svg aria-hidden="true"><path id="traço"></path></svg></button>
+      <a href="#/perfil"><svg aria-hidden="true" id="icone"></svg><span>Perfil</span></a>
+    `)
+    expect(describeElement(body.querySelector('#traço'))).toBe('Fechar, botão')
+    expect(describeElement(body.querySelector('#icone'))).toBe('Perfil, link')
+  })
+
+  it('usa o atributo title quando não há outro nome (alfinetes do mapa)', () => {
+    const body = render(
+      `<div id="pino" role="button" title="Escadaria do Mirante"><span aria-hidden="true">●</span></div>`,
+    )
+    expect(describeElement(body.querySelector('#pino'))).toBe('Escadaria do Mirante, botão')
   })
 
   it('informa o estado de chaves, caixas e opções', () => {
@@ -268,6 +358,27 @@ describe('descrição falada dos elementos', () => {
     const text = readableText(body.querySelector('main'))
     expect(text).toBe('Demandas. Problemas do bairro. Abrir o mapa. Buraco na rua. Poste apagado.')
     expect(readableText(null)).toBe('')
+  })
+
+  it('na leitura da tela, valores com milhar ficam inteiros e listas dizem só a opção escolhida', () => {
+    const body = render(`
+      <main>
+        <p>Faturamento: R$ 4.418,10</p>
+        <p>Contato: padaria@nexa.demo</p>
+        <select id="ordem">
+          <option value="a">Mais recentes</option>
+          <option value="b">Mais apoiadas</option>
+        </select>
+        <p>Fim.Começo de outra frase</p>
+      </main>
+    `)
+    ;(body.querySelector('#ordem') as HTMLSelectElement).value = 'b'
+    const text = readableText(body.querySelector('main'))
+    expect(text).toContain('R$ 4.418,10')
+    expect(text).toContain('padaria@nexa.demo')
+    expect(text).toContain('Mais apoiadas.')
+    expect(text).not.toContain('Mais recentes')
+    expect(text).toContain('Fim. Começo de outra frase')
   })
 })
 

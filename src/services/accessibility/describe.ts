@@ -55,8 +55,9 @@ export function accessibleName(element: Element): string {
     return fieldLabel(element) || clean(element.getAttribute('placeholder'))
   }
   if (element.matches('img')) return clean(element.getAttribute('alt'))
-  // Botões e chaves também podem ser nomeados por um <label for>.
-  return visibleText(element) || fieldLabel(element)
+  // Botões e chaves também podem ser nomeados por um <label for>; `title` é o último
+  // recurso (é assim que os alfinetes do mapa informam o nome do ponto).
+  return visibleText(element) || fieldLabel(element) || clean(element.getAttribute('title'))
 }
 
 function roleOf(element: Element): string {
@@ -155,10 +156,10 @@ function valueOf(element: Element, role: string): string {
  */
 export function describeElement(target: EventTarget | null): string | null {
   if (!(target instanceof Element)) return null
-  if (target.closest('[aria-hidden="true"]')) return null
-  // Dentro de um controle interativo, o que vale é o controle inteiro.
+  // Dentro de um controle interativo, o que vale é o controle inteiro — mesmo que o
+  // toque tenha caído em um ícone decorativo (aria-hidden) dentro dele.
   const element = target.closest(INTERACTIVE) ?? target.closest(READABLE)
-  if (!element) return null
+  if (!element || element.closest('[aria-hidden="true"]')) return null
 
   const role = roleOf(element)
   const name = accessibleName(element)
@@ -175,6 +176,11 @@ export function describeElement(target: EventTarget | null): string | null {
 export function readableText(region: Element | null): string {
   if (!region) return ''
   const clone = region.cloneNode(true) as Element
+  // Listas de opções: lê só a opção escolhida (o clone não guarda a escolha da pessoa).
+  const originals = region.querySelectorAll('select')
+  clone.querySelectorAll('select').forEach((select, index) => {
+    select.replaceWith(` ${clean(originals[index]?.selectedOptions[0]?.textContent)}. `)
+  })
   clone
     .querySelectorAll('[aria-hidden="true"], script, style, [data-no-read], .leaflet-container')
     .forEach((node) => node.remove())
@@ -190,7 +196,10 @@ export function readableText(region: Element | null): string {
   clone
     .querySelectorAll('h1, h2, h3, h4, p, li, button, a, label, section, article, tr, summary')
     .forEach((node) => node.append('. '))
-  return clean(clone.textContent)
-    .replace(/(\s*\.)+/g, '.')
-    .replace(/\.(?=\S)/g, '. ')
+  return (
+    clean(clone.textContent)
+      .replace(/(\s*\.)+/g, '.')
+      // Separa frases coladas ("fim.Começo"), sem mexer em números (1.234,56) nem em e-mails.
+      .replace(/\.(?=[A-ZÀ-Ý])/g, '. ')
+  )
 }

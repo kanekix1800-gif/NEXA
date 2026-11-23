@@ -181,7 +181,6 @@ const INTENT_KEYWORDS: Array<[Intent, string[]]> = [
       'salao',
       'pet',
       'assistencia',
-      'perto de mim',
     ],
   ],
   [
@@ -221,8 +220,6 @@ const INTENT_KEYWORDS: Array<[Intent, string[]]> = [
       'transporte',
       'onibus acessivel',
       'onibus acessiveis',
-      'cadeira de rodas',
-      'cadeirante',
       'piso baixo',
       'parada de onibus',
       'ponto de onibus',
@@ -264,7 +261,7 @@ const INTENT_KEYWORDS: Array<[Intent, string[]]> = [
   ['greeting', ['ola', 'oi', 'bom dia', 'boa tarde', 'boa noite', 'tudo bem']],
 ]
 
-function detectIntent(question: string): Intent {
+export function detectIntent(question: string): Intent {
   const text = normalizeText(question)
   let best: { intent: Intent; score: number } = { intent: 'unknown', score: 0 }
   for (const [intent, words] of INTENT_KEYWORDS) {

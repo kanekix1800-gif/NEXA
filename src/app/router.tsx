@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react'
 import { createHashRouter, Outlet, ScrollRestoration, type RouteObject } from 'react-router'
 
-import { ReaderButton, RouteAnnouncer, SkipLink } from '@/components/accessibility'
+import { APP_ROUTE_ID, ReaderButton, RouteAnnouncer, SkipLink } from '@/components/accessibility'
 import { AREA_ROLES } from '@/services/permissions'
 
 import { PublicOnly, RequireAuth, RequireRole } from './guards'
@@ -285,7 +285,7 @@ export const routes: RouteObject[] = [
       },
       {
         element: <RequireAuth />,
-        children: [{ element: <AppLayout />, children: appRoutes }],
+        children: [{ id: APP_ROUTE_ID, element: <AppLayout />, children: appRoutes }],
       },
       ...devRoutes,
       { path: '*', element: <NotFoundPage /> },
