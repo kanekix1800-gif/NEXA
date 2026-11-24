@@ -71,7 +71,7 @@ const poster = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><s
   <main>
     <p class="call">Aponte a câmera do celular<br>e abra o NEXA</p>
     <div class="qr">${qrSvg(main.url)}</div>
-    <p class="url">${main.url.replace(/^https?:\/\//, '')}</p>
+    <p class="url">${main.url.replace(/^https?:\/\//, '').replace(/\/$/, '')}</p>
     <section class="profiles">
       <h2>Ou entre direto em um perfil de demonstração</h2>
       <div class="grid">${profiles

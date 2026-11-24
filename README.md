@@ -8,7 +8,7 @@ Este repositório contém um **protótipo funcional** criado para um hackathon. 
 
 ## Experimente em um minuto
 
-1. Abra o site publicado (ou rode localmente — veja [Como executar](#como-executar)).
+1. Abra o site publicado em <https://nexa-br.github.io> (ou rode localmente — veja [Como executar](#como-executar)).
 2. Toque em **Entrar** e escolha um perfil em **Acesso rápido**. Não precisa de cadastro nem de senha.
 
 | Perfil                                                            | O que mostra                                                        | E-mail                  | Link direto                 |
